@@ -15,7 +15,7 @@ They may later become separate repositories, but the immediate goal is rapid, ca
 
 ## Decision
 
-Start as a pnpm workspace monorepo:
+Start as a Bun workspace monorepo (workspaces declared in root `package.json`):
 
 - `apps/odissi-sydney`
 - `apps/caldera`

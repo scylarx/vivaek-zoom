@@ -11,11 +11,12 @@ Use a modern TypeScript web stack aligned with the current official framework di
 - Next.js 16 App Router
 - React 19.2 or the current React 19 release compatible with Next.js 16
 - TypeScript strict mode
-- Node 22 LTS
-- pnpm workspaces
+- Node 22 LTS for Vercel-side runtime
+- Bun 1.2+ as the local toolchain (install, run, test); workspaces declared in root `package.json`. No npm/pnpm/yarn.
 - Tailwind CSS v4
-- Turbopack
+- Turbopack (default in Next 16 dev + build)
 - React Compiler, enabled intentionally and verified
+- Biome 2.4 for lint + format
 
 ## Framework Notes
 
