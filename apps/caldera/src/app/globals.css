@@ -136,8 +136,11 @@ body {
   transform: translateY(0);
 }
 
-/* Mandala rotation — slow, hypnotic */
-@keyframes caldera-rotate {
+/* Mandala — layered SVG geometry, multiple rotation speeds + breathing.
+   Each group is `transform-origin: center` (set on the parent <svg>'s coordinate
+   space; rotations apply to <g> elements via SVG's own coordinate system). */
+
+@keyframes m-rotate-cw {
   from {
     transform: rotate(0deg);
   }
@@ -145,9 +148,102 @@ body {
     transform: rotate(360deg);
   }
 }
+@keyframes m-rotate-ccw {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+@keyframes m-pulse-core {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes m-pulse-halo {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+@keyframes m-flow-dash {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -120;
+  }
+}
 
+/* Each <g> gets its own animation; transform-box: fill-box keeps SVG groups
+   pivoting around their own centre rather than the page origin. */
+.m-spin-cw-slow,
+.m-spin-cw-med,
+.m-spin-ccw-slow,
+.m-spin-ccw-med,
+.m-pulse-core,
+.m-pulse-halo {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.m-spin-cw-slow {
+  animation: m-rotate-cw 240s linear infinite;
+}
+.m-spin-cw-med {
+  animation: m-rotate-cw 110s linear infinite;
+}
+.m-spin-ccw-slow {
+  animation: m-rotate-ccw 180s linear infinite;
+}
+.m-spin-ccw-med {
+  animation: m-rotate-ccw 85s linear infinite;
+}
+.m-pulse-core {
+  animation: m-pulse-core 7s ease-in-out infinite;
+}
+.m-pulse-halo {
+  animation: m-pulse-halo 11s ease-in-out infinite;
+}
+.m-flow-dash circle {
+  animation: m-flow-dash 28s linear infinite;
+}
+
+/* Reduced-motion + sensory-light: freeze every mandala animation. */
+@media (prefers-reduced-motion: reduce) {
+  .m-spin-cw-slow,
+  .m-spin-cw-med,
+  .m-spin-ccw-slow,
+  .m-spin-ccw-med,
+  .m-pulse-core,
+  .m-pulse-halo,
+  .m-flow-dash circle {
+    animation: none;
+  }
+}
+:root[data-sensory="light"] .m-spin-cw-slow,
+:root[data-sensory="light"] .m-spin-cw-med,
+:root[data-sensory="light"] .m-spin-ccw-slow,
+:root[data-sensory="light"] .m-spin-ccw-med,
+:root[data-sensory="light"] .m-pulse-core,
+:root[data-sensory="light"] .m-pulse-halo,
+:root[data-sensory="light"] .m-flow-dash circle {
+  animation: none;
+}
+
+/* Legacy class — kept in case any consumer still references it. Single rotation. */
 .mandala-rotate {
-  animation: caldera-rotate 90s linear infinite;
+  animation: m-rotate-cw 90s linear infinite;
   transform-origin: center;
 }
 
@@ -186,6 +282,25 @@ body {
   width: 30rem;
   height: 30rem;
   background: var(--color-neon-green);
+}
+
+.caldera-glow-three {
+  top: 60rem;
+  right: -8rem;
+  width: 22rem;
+  height: 22rem;
+  background: var(--color-neon-blue);
+  opacity: 0.16;
+}
+
+/* Light-mode tuning: kill the dark-mode glow on the gradient text and soften
+   the page-wide glow blobs so they don't bruise the cream background. */
+:root[data-theme="light"] .caldera-gradient {
+  text-shadow: none;
+}
+:root[data-theme="light"] .caldera-glow {
+  opacity: 0.12;
+  filter: blur(96px);
 }
 
 .audio-console {
@@ -244,6 +359,21 @@ body {
 .track-dot-green {
   background: var(--color-neon-green);
   color: var(--color-neon-green);
+}
+
+.player-button {
+  border: 1px solid var(--color-rule);
+  padding-block: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+.player-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
 }
 
 @media (prefers-reduced-motion: reduce) {

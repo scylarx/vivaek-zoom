@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ContactForm } from "@/components/ContactForm";
 
 const offerings = [
   {
@@ -153,12 +154,12 @@ export default function HomePage() {
               Indian classical dance, voice, and instrumental music
             </p>
             <h1 className="mt-7 max-w-4xl font-(family-name:--font-display) text-4xl font-medium leading-[1] text-[--color-ink] sm:text-6xl lg:text-7xl">
-              Authentic Odissi and classical music with master teacher{" "}
+              Authentic Indian classical dance and music with master teacher{" "}
               <em className="not-italic text-[--color-jewel-maroon]">Nirmal Jena</em>.
             </h1>
             <p className="mt-7 max-w-2xl font-(family-name:--font-body) text-lg leading-[1.65] text-[--color-ink] sm:text-xl">
               In Sydney and the Blue Mountains, Nirmal offers inspiring, transformative teaching for
-              students of all levels -- whether you wish to perform, deepen your artistic practice,
+              students of all levels — whether you wish to perform, deepen your artistic practice,
               or support your health and wellbeing.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -203,13 +204,13 @@ export default function HomePage() {
       <section className="px-5 pb-20 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-7xl gap-8 border-t border-[--color-rule] pt-10 lg:grid-cols-[0.8fr_1.2fr]">
           <p className="font-(family-name:--font-display) text-3xl italic leading-[1.3] text-[--color-jewel-aubergine] sm:text-4xl">
-            A living tradition taught with rigor, generosity, and devotion.
+            A living tradition, taught with rigour, generosity, and devotion.
           </p>
           <p className="max-w-3xl font-(family-name:--font-body) text-base leading-[1.75] text-[--color-ink-muted]">
-            The page should feel like care made visible: respectful of the existing website, precise
-            about the lineage, and warm enough for a new student to feel welcome before they arrive.
-            Every image here is drawn from the current site and should remain provenance-tagged
-            until the family confirms final rights.
+            Nirmal teaches the Jena style of Odissi — his father&apos;s distinct family lineage — at
+            studios in eastern Sydney and the Blue Mountains, and to the actors at the National
+            Institute of Dramatic Art. Students arrive as beginners, as serious performers, and as
+            people seeking the practice itself.
           </p>
         </div>
       </section>
@@ -228,7 +229,7 @@ export default function HomePage() {
                 id="practice-heading"
                 className="mt-5 font-(family-name:--font-display) text-4xl font-medium leading-tight text-[--color-ink] sm:text-5xl"
               >
-                Discipline with a human doorway.
+                Three forms. One classical practice.
               </h2>
             </div>
             <div className="grid gap-5 md:grid-cols-3">
@@ -257,9 +258,11 @@ export default function HomePage() {
               The Jena style of Odissi, in his father&apos;s lineage.
             </h2>
             <p className="mt-8 text-base leading-[1.75] text-[--color-ink-muted]">
-              Guru Surendra Nath Jena&apos;s legacy is not treated here as decoration. It is a
-              responsibility: names, training, repertoire, imagery, and sacred references must be
-              handled accurately and confirmed before becoming public design language.
+              Nirmal is the son of Guru Surendra Nath Jena. The Jena style is recognised for the
+              depth of its basic positions, the undulating shape of its movement, and a
+              solo-performance focus that explores the <em>raudra</em> and <em>bibatsa</em>{" "}
+              sentiments where many Odissi traditions do not. Four scholarly sources document the
+              style; Nirmal&apos;s own translations of his father&apos;s writing carry it forward.
             </p>
           </div>
           <figure className="self-end border-t border-[--color-rule] pt-8">
@@ -317,45 +320,46 @@ export default function HomePage() {
               Arts & Life Education Gurukul Ltd
             </p>
             <h2 className="mt-5 font-(family-name:--font-display) text-4xl font-medium leading-tight text-[--color-ink] sm:text-5xl">
-              Dance for Humanity belongs near the heart of the site.
+              Dance for Humanity. Free training, taught seriously.
             </h2>
           </div>
           <div className="space-y-5 text-base leading-[1.75] text-[--color-ink-muted]">
             <p>
-              Founded by Nirmal Jena and Chitrita Mukerjee, ALEG is an Australian registered charity
-              with DGR status. Its free training program supports young people experiencing
-              financial hardship through Odissi dance, music, and life skills.
+              Founded by Nirmal Jena and Chitrita Mukerjee, the Arts &amp; Life Education Gurukul is
+              an Australian registered charity with DGR status. Its program supports young people
+              experiencing financial hardship through Odissi dance, music, and life skills — over
+              years, not weeks.
             </p>
             <p>
-              This story should not be hidden as an administrative afterthought. It is one of the
-              clearest signals of the family&apos;s values: creativity, diversity, humanity, and
-              sustainability made practical.
+              Creativity, diversity, humanity, and sustainability are the values Nirmal and Chitrita
+              work toward, in the school and through ALEG.
             </p>
           </div>
         </div>
       </section>
 
       <section id="contact" className="px-5 py-16 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 border-t border-[--color-rule] pt-10 md:flex-row md:items-end md:justify-between">
+        <div className="mx-auto grid max-w-7xl gap-12 border-t border-[--color-rule] pt-10 lg:grid-cols-[0.85fr_1.15fr]">
           <div>
             <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-[--color-jewel-maroon]">
               Sydney and the Blue Mountains
             </p>
-            <h2 className="mt-4 max-w-3xl font-(family-name:--font-display) text-4xl font-medium leading-tight text-[--color-ink]">
-              A site worthy of being shown to the family before a line of copy is rushed.
+            <h2 className="mt-4 max-w-xl font-(family-name:--font-display) text-4xl font-medium leading-tight text-[--color-ink]">
+              Reach out about classes, training, performance, or ALEG.
             </h2>
-            <p className="mt-5 max-w-3xl text-base leading-[1.7] text-[--color-ink-muted]">
-              We acknowledge the Bidjigal, Gadigal, Dharug and Gundungurra people of the First
-              Nations in Australia and thank them for allowing us to live, work and dance on their
-              land.
+            <p className="mt-5 max-w-xl text-base leading-[1.7] text-[--color-ink-muted]">
+              Tell us a little about what brings you here. Nirmal and Chitrita will reply
+              personally.
+            </p>
+            <p className="mt-8 max-w-xl text-sm leading-[1.7] text-[--color-ink-muted]">
+              We acknowledge the Bidjigal, Gadigal, Dharug and Gundungurra peoples of the First
+              Nations as the Traditional Custodians of the lands on which we teach, and pay our
+              respects to Elders past and present.
             </p>
           </div>
-          <a
-            href="https://www.odissisydney.com/contact-us.html"
-            className="inline-flex w-fit border border-[--color-jewel-maroon] px-6 py-3 text-base text-[--color-jewel-maroon] transition-colors hover:bg-[--color-jewel-maroon] hover:text-[--color-stone-cream]"
-          >
-            Contact via current site
-          </a>
+          <div>
+            <ContactForm />
+          </div>
         </div>
       </section>
     </main>

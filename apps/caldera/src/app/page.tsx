@@ -1,28 +1,30 @@
+import { demoTracks } from "@/audio/demo-tracks";
+import { QueueBootstrap } from "@/audio/QueueBootstrap";
+import { ScrollSoundConductor } from "@/audio/ScrollSoundConductor";
+import { sanityTrackToPlayerTrack } from "@/audio/track-model";
+import { PlayerBar } from "@/components/PlayerBar";
+import { SensoryToggle } from "@/components/SensoryToggle";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { UnlockSound } from "@/components/UnlockSound";
+import { getTracksForHomepage } from "@/lib/sanity/queries";
+import MandalaClient from "@/three/MandalaClient";
+
 const signals = [
   {
     id: "001",
     title: "Sound",
-    text: "Opt-in audio, artist attribution, platform links, and native playback only where rights are clean.",
+    text: "Tracks Caldera vouches for. Tap once and the queue wakes. Skip, scrub, step out — never surprise audio.",
   },
   {
     id: "002",
     title: "Events",
-    text: "Upcoming, past, and whispered-about gatherings with enough detail to feel oriented before arrival.",
+    text: "Each gathering with enough detail to decide before you commit. Door, room, lineup, who's holding it.",
   },
   {
     id: "003",
     title: "Safe base",
-    text: "Neurodivergent-aware details: entry, sound intensity, chill space, transport, consent, and who to find.",
+    text: "Sensory load, transport, accessibility, consent — answered on every event page before you ask.",
   },
-];
-
-const eventFrames = [
-  "arrival clarity",
-  "good people first",
-  "no pressure to perform socially",
-  "music as invitation",
-  "promoters with care",
-  "sensory-light path",
 ];
 
 const nightProtocol = [
@@ -33,10 +35,25 @@ const nightProtocol = [
   "promoter contact that feels human",
 ];
 
-const trackQueue = [
-  { time: "00:00", label: "threshold", tone: "purple" },
-  { time: "02:18", label: "deep room", tone: "blue" },
-  { time: "06:44", label: "green signal", tone: "green" },
+const soundStages = [
+  {
+    id: "01",
+    label: "silent",
+    body: "The page loads quiet. The mandala moves without asking anything from you.",
+    accent: "purple" as const,
+  },
+  {
+    id: "02",
+    label: "tap",
+    body: "One gesture. The consent is yours. The player at the bottom of every scroll wakes up.",
+    accent: "blue" as const,
+  },
+  {
+    id: "03",
+    label: "flowing",
+    body: "The night's queue plays. Skip, scrub, step out anytime. The room stays open.",
+    accent: "green" as const,
+  },
 ];
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001";
@@ -65,88 +82,34 @@ const structuredData = {
   ],
 };
 
-function StaticMandala() {
-  const rings = [
-    { r: 34, opacity: 0.95, color: "var(--color-neon-green)", dash: "0 0" },
-    { r: 58, opacity: 0.8, color: "var(--color-neon-blue)", dash: "2 8" },
-    { r: 88, opacity: 0.72, color: "var(--color-neon-purple)", dash: "1 7" },
-    { r: 122, opacity: 0.48, color: "var(--color-neon-green)", dash: "5 5" },
-    { r: 164, opacity: 0.3, color: "var(--color-neon-blue)", dash: "0 0" },
-  ];
-  const petals = Array.from({ length: 36 }, (_, i) => i * 10);
-  const spokes = Array.from({ length: 24 }, (_, i) => i * 15);
+const accentToken: Record<"purple" | "blue" | "green", string> = {
+  purple: "var(--color-neon-purple)",
+  blue: "var(--color-neon-blue)",
+  green: "var(--color-neon-green)",
+};
 
-  return (
-    <svg
-      viewBox="-220 -220 440 440"
-      role="img"
-      aria-label="Rotating Caldera mandala in purple, blue, and green"
-      className="mandala-rotate block aspect-square w-full"
-    >
-      <defs>
-        <radialGradient id="mandala-core" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="var(--color-neon-green)" stopOpacity="0.85" />
-          <stop offset="48%" stopColor="var(--color-neon-blue)" stopOpacity="0.28" />
-          <stop offset="100%" stopColor="var(--color-neon-purple)" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      <circle cx="0" cy="0" r="190" fill="url(#mandala-core)" opacity="0.36" />
-      {petals.map((angle) => (
-        <ellipse
-          key={angle}
-          cx="0"
-          cy="-96"
-          rx="13"
-          ry="78"
-          fill="none"
-          stroke="var(--color-neon-purple)"
-          strokeOpacity="0.22"
-          strokeWidth="1"
-          transform={`rotate(${angle})`}
-        />
-      ))}
-      {rings.map((ring) => (
-        <circle
-          key={ring.r}
-          cx="0"
-          cy="0"
-          r={ring.r}
-          fill="none"
-          stroke={ring.color}
-          strokeOpacity={ring.opacity}
-          strokeWidth={1}
-          strokeDasharray={ring.dash}
-        />
-      ))}
-      {spokes.map((angle) => (
-        <line
-          key={angle}
-          x1="0"
-          y1="-184"
-          x2="0"
-          y2="-42"
-          stroke="var(--color-neon-blue)"
-          strokeOpacity={0.2}
-          strokeWidth={0.6}
-          transform={`rotate(${angle})`}
-        />
-      ))}
-      <circle
-        cx="0"
-        cy="0"
-        r="15"
-        fill="var(--color-void)"
-        stroke="var(--color-neon-green)"
-        strokeWidth={1.5}
-        strokeOpacity={0.95}
-      />
-    </svg>
-  );
+async function getHomepageQueue() {
+  if (!process.env.SANITY_PROJECT_ID) return demoTracks;
+
+  try {
+    const sanityTracks = await getTracksForHomepage();
+    const playerTracks = sanityTracks
+      .map(sanityTrackToPlayerTrack)
+      .filter((track) => track !== null);
+    return playerTracks.length > 0 ? playerTracks : demoTracks;
+  } catch (error) {
+    console.warn("[caldera/audio] Falling back to demo queue.", error);
+    return demoTracks;
+  }
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const playerTracks = await getHomepageQueue();
+
   return (
-    <main id="main-content" className="relative min-h-dvh overflow-hidden">
+    <main id="main-content" className="relative min-h-dvh overflow-hidden pb-32 lg:pb-40">
+      <QueueBootstrap tracks={playerTracks} />
+      <ScrollSoundConductor />
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is generated from static, repo-owned content plus NEXT_PUBLIC_SITE_URL.
@@ -154,7 +117,9 @@ export default function HomePage() {
       />
       <div className="caldera-glow caldera-glow-one" />
       <div className="caldera-glow caldera-glow-two" />
+      <div className="caldera-glow caldera-glow-three" />
 
+      {/* Header */}
       <header className="relative z-20 px-5 py-5 sm:px-8 lg:px-10">
         <nav className="mx-auto flex max-w-7xl items-center justify-between gap-5">
           <a
@@ -164,47 +129,53 @@ export default function HomePage() {
             caldera
           </a>
           <div className="hidden items-center gap-7 font-(family-name:--font-mono) text-xs uppercase tracking-[0.18em] text-[--color-fg-muted] md:flex">
-            <a href="#sound" className="hover:text-[--color-neon-green]">
+            <a href="#sound" className="transition-colors hover:text-[--color-neon-green]">
               Sound
             </a>
-            <a href="#events" className="hover:text-[--color-neon-blue]">
+            <a href="#events" className="transition-colors hover:text-[--color-neon-blue]">
               Events
             </a>
-            <a href="#community" className="hover:text-[--color-neon-purple]">
+            <a href="#community" className="transition-colors hover:text-[--color-neon-purple]">
               Community
             </a>
           </div>
-          <a
-            href="#sound"
-            className="border border-[--color-neon-green] px-4 py-2 font-(family-name:--font-mono) text-xs uppercase tracking-[0.16em] text-[--color-neon-green] shadow-[0_0_24px_color-mix(in_oklch,var(--color-neon-green)_18%,transparent)]"
-          >
-            unlock sound
-          </a>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <SensoryToggle />
+            <UnlockSound />
+          </div>
         </nav>
       </header>
 
+      {/* Hero */}
       <section id="top" className="relative px-5 pb-10 sm:px-8 lg:px-10">
         <div className="mx-auto grid max-w-7xl items-center gap-10 py-12 lg:grid-cols-[0.95fr_1.05fr] lg:py-16">
           <div className="relative z-10">
             <p className="max-w-full font-(family-name:--font-mono) text-xs uppercase leading-6 tracking-[0.2em] text-[--color-neon-green] sm:tracking-[0.28em]">
-              Sydney niche music / safe base
+              Sydney sound · safe base · good people
             </p>
             <h1 className="mt-7 max-w-4xl break-words font-(family-name:--font-display) text-5xl font-semibold leading-[0.92] text-[--color-fg] sm:text-7xl lg:text-[8rem]">
               Welcome to <span className="caldera-gradient italic">Psydney</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-[1.65] text-[--color-fg-muted] sm:text-xl">
-              A living signal for the good people: promoters, dancers, deep listeners, new friends,
-              and neurodivergent humans who want somewhere warm to land before the night opens up.
+              Music and community collide. For promoters, dancers, deep listeners, and anyone who
+              wants to know how the night feels before they arrive.
             </p>
           </div>
 
           <div className="relative z-0 mx-auto w-full max-w-[34rem] lg:max-w-[42rem]">
-            <StaticMandala />
+            <div className="aspect-square w-full">
+              <MandalaClient />
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="border-y border-[--color-rule] bg-[color-mix(in_oklch,var(--color-bg-elevated)_72%,transparent)] px-5 py-10 sm:px-8 lg:px-10">
+      {/* Three signals */}
+      <section
+        aria-label="What this site does"
+        className="relative z-10 border-y border-[--color-rule] bg-[color-mix(in_oklch,var(--color-bg-elevated)_72%,transparent)] px-5 py-10 sm:px-8 lg:px-10"
+      >
         <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
           {signals.map((signal) => (
             <article
@@ -220,7 +191,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="px-5 py-20 sm:px-8 lg:px-10">
+      {/* Anchor + What to expect */}
+      <section className="relative z-10 px-5 py-20 sm:px-8 lg:px-10">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="event-slab border border-[--color-rule] p-6 sm:p-8">
             <p className="font-(family-name:--font-mono) text-xs uppercase tracking-[0.24em] text-[--color-neon-green]">
@@ -242,145 +214,232 @@ export default function HomePage() {
           </div>
           <aside className="border border-[--color-rule] bg-[--color-panel] p-6 sm:p-8">
             <p className="font-(family-name:--font-mono) text-xs uppercase tracking-[0.24em] text-[--color-neon-purple]">
-              why this matters
+              what to expect
             </p>
             <p className="mt-5 text-2xl leading-[1.35] text-[--color-fg]">
-              The site has to do social translation: turn a poster, a track, and a room full of
-              strangers into enough trust for someone new to arrive.
+              Each event page tells you what the night feels like — door, music, energy, who&apos;s
+              holding the room — so you can decide before you commit.
             </p>
             <p className="mt-6 text-sm leading-[1.7] text-[--color-fg-muted]">
-              That is the actual product. Tickets, feeds, embeds, and animations are in service of
-              that trust.
+              Tickets and links are below. The information that matters is the rest.
             </p>
           </aside>
         </div>
       </section>
 
-      <section id="sound" className="px-5 py-20 sm:px-8 lg:px-10">
-        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <p className="font-(family-name:--font-mono) text-xs uppercase tracking-[0.24em] text-[--color-neon-blue]">
-              Sound layer
-            </p>
-            <h2 className="mt-5 font-(family-name:--font-display) text-4xl font-semibold leading-tight text-[--color-fg] sm:text-5xl">
-              No surprise audio. The first tap is a threshold.
-            </h2>
-          </div>
-          <div className="audio-console border border-[--color-rule] p-5 sm:p-6">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="font-(family-name:--font-mono) text-xs uppercase tracking-[0.2em] text-[--color-neon-green]">
-                  player state
-                </p>
-                <p className="mt-3 text-2xl font-medium text-[--color-fg]">
-                  Consent-first mix rail
-                </p>
-                <p className="mt-2 max-w-xl text-sm leading-[1.6] text-[--color-fg-muted]">
-                  Spotify, SoundCloud, and licensed local clips become one clear surface: play,
-                  pause, skip, attribution, progress, and external listening.
-                </p>
-              </div>
-              <div className="grid grid-cols-3 gap-2 font-(family-name:--font-mono) text-xs uppercase tracking-[0.14em]">
-                <span className="border border-[--color-neon-purple] px-3 py-2 text-center text-[--color-neon-purple]">
-                  play
-                </span>
-                <span className="border border-[--color-neon-blue] px-3 py-2 text-center text-[--color-neon-blue]">
-                  skip
-                </span>
-                <span className="border border-[--color-neon-green] px-3 py-2 text-center text-[--color-neon-green]">
-                  save
-                </span>
-              </div>
+      {/* Sound layer — three stages, replaces the static console mock */}
+      <section id="sound" className="relative z-10 px-5 py-20 sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+            <div>
+              <p className="font-(family-name:--font-mono) text-xs uppercase tracking-[0.24em] text-[--color-neon-blue]">
+                Sound layer
+              </p>
+              <h2 className="mt-5 font-(family-name:--font-display) text-4xl font-semibold leading-tight text-[--color-fg] sm:text-5xl">
+                No surprise audio. The first tap is a threshold.
+              </h2>
+              <p className="mt-6 max-w-md text-base leading-[1.7] text-[--color-fg-muted]">
+                The site never plays sound until you tell it to. Once you tap, the player at the
+                bottom of every scroll holds the night&apos;s queue. You stay in control of the
+                room.
+              </p>
             </div>
-            <div className="mt-8 h-2 overflow-hidden border border-[--color-rule]">
-              <div className="h-full w-2/5 bg-[linear-gradient(90deg,var(--color-neon-purple),var(--color-neon-blue),var(--color-neon-green))]" />
-            </div>
-            <div className="mt-6 grid gap-2 sm:grid-cols-3">
-              {trackQueue.map((track) => (
-                <div
-                  key={track.time}
-                  className="border border-[--color-rule] px-3 py-3 font-(family-name:--font-mono) text-xs uppercase tracking-[0.12em]"
+
+            <ol className="grid gap-4 sm:grid-cols-3">
+              {soundStages.map((stage) => (
+                <li
+                  key={stage.id}
+                  className="relative border border-[--color-rule] bg-[color-mix(in_oklch,var(--color-panel)_82%,transparent)] p-5 sm:p-6"
+                  style={{
+                    boxShadow: `inset 0 0 0 1px color-mix(in oklch, ${accentToken[stage.accent]} 12%, transparent)`,
+                  }}
                 >
-                  <span className={`track-dot track-dot-${track.tone}`} />
-                  <span className="ml-2 text-[--color-fg-muted]">{track.time}</span>
-                  <span className="ml-2 text-[--color-fg]">{track.label}</span>
-                </div>
+                  <p
+                    className="font-(family-name:--font-mono) text-[0.65rem] uppercase tracking-[0.24em]"
+                    style={{ color: accentToken[stage.accent] }}
+                  >
+                    stage {stage.id}
+                  </p>
+                  <p className="mt-3 font-(family-name:--font-display) text-2xl font-medium text-[--color-fg]">
+                    {stage.label}
+                  </p>
+                  <p className="mt-4 text-sm leading-[1.65] text-[--color-fg-muted]">
+                    {stage.body}
+                  </p>
+                </li>
               ))}
-            </div>
+            </ol>
+          </div>
+
+          <div className="mt-12 flex items-center gap-3 border-t border-[--color-rule] pt-6 font-(family-name:--font-mono) text-[0.7rem] uppercase tracking-[0.24em] text-[--color-fg-muted]">
+            <span aria-hidden="true">↓</span>
+            <span>The player lives at the bottom of every scroll. Tap when you&apos;re ready.</span>
           </div>
         </div>
       </section>
 
-      <section id="events" className="border-y border-[--color-rule] px-5 py-16 sm:px-8 lg:px-10">
+      {/* Events — real card pattern (next event placeholder + past archive) */}
+      <section
+        id="events"
+        className="relative z-10 border-y border-[--color-rule] bg-[color-mix(in_oklch,var(--color-bg-elevated)_60%,transparent)] px-5 py-20 sm:px-8 lg:px-10"
+      >
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="font-(family-name:--font-mono) text-xs uppercase tracking-[0.24em] text-[--color-neon-green]">
-                Event language
+                Event pages
               </p>
               <h2 className="mt-4 font-(family-name:--font-display) text-4xl font-semibold text-[--color-fg] sm:text-5xl">
                 The flyer is not enough.
               </h2>
             </div>
             <p className="max-w-xl text-base leading-[1.65] text-[--color-fg-muted]">
-              Each event page should answer the social questions people are too shy to ask: what it
-              feels like, how to arrive, where to breathe, and who is holding the room.
+              Each event page tells you the social details a flyer leaves out: what it feels like,
+              how to arrive, where the chill space is, and who&apos;s holding the room.
             </p>
           </div>
-          <div className="mt-10 flex flex-wrap gap-3">
-            {eventFrames.map((frame) => (
-              <span
-                key={frame}
-                className="border border-[--color-rule] bg-[--color-panel] px-4 py-2 font-(family-name:--font-mono) text-xs uppercase tracking-[0.14em] text-[--color-fg-muted]"
-              >
-                {frame}
-              </span>
-            ))}
+
+          {/* Next event card — placeholder until Sanity has the first event */}
+          <article className="mt-10 grid gap-6 border border-[--color-rule] bg-[color-mix(in_oklch,var(--color-panel)_88%,transparent)] p-6 sm:p-8 lg:grid-cols-[200px_1fr_auto]">
+            <div className="flex flex-col gap-2">
+              <p className="font-(family-name:--font-mono) text-[0.65rem] uppercase tracking-[0.24em] text-[--color-neon-green]">
+                next
+              </p>
+              <p className="font-(family-name:--font-display) text-4xl font-semibold leading-none text-[--color-fg]">
+                TBA
+              </p>
+              <p className="font-(family-name:--font-mono) text-xs uppercase tracking-[0.18em] text-[--color-fg-muted]">
+                date holding
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <p className="font-(family-name:--font-display) text-2xl font-medium leading-snug text-[--color-fg]">
+                The first Caldera night is in the room being built.
+              </p>
+              <dl className="grid gap-3 font-(family-name:--font-mono) text-xs uppercase tracking-[0.16em] text-[--color-fg-muted] sm:grid-cols-2">
+                <div className="flex items-baseline gap-3">
+                  <dt className="w-20 shrink-0 text-[--color-neon-blue]">venue</dt>
+                  <dd>Sydney — to be announced</dd>
+                </div>
+                <div className="flex items-baseline gap-3">
+                  <dt className="w-20 shrink-0 text-[--color-neon-blue]">lineup</dt>
+                  <dd>locked privately, shared close to the date</dd>
+                </div>
+                <div className="flex items-baseline gap-3">
+                  <dt className="w-20 shrink-0 text-[--color-neon-blue]">door</dt>
+                  <dd>set time + arrival map sent to the list</dd>
+                </div>
+                <div className="flex items-baseline gap-3">
+                  <dt className="w-20 shrink-0 text-[--color-neon-blue]">access</dt>
+                  <dd>chill-space, transport, sensory notes — on the page</dd>
+                </div>
+              </dl>
+            </div>
+
+            <a
+              href="#community"
+              className="self-start border border-[--color-neon-green] bg-[color-mix(in_oklch,var(--color-neon-green)_6%,transparent)] px-5 py-3 font-(family-name:--font-mono) text-xs uppercase tracking-[0.2em] text-[--color-neon-green] transition-colors hover:bg-[color-mix(in_oklch,var(--color-neon-green)_14%,transparent)] lg:self-center"
+            >
+              get on the list →
+            </a>
+          </article>
+
+          {/* Past events archive placeholder */}
+          <div className="mt-6 border border-dashed border-[--color-rule] bg-transparent p-6 sm:p-8">
+            <p className="font-(family-name:--font-mono) text-[0.65rem] uppercase tracking-[0.24em] text-[--color-fg-muted]">
+              past archive
+            </p>
+            <p className="mt-3 max-w-2xl text-base leading-[1.7] text-[--color-fg-muted]">
+              Past events archive here once we&apos;ve held them. We keep door-to-end notes so
+              people who weren&apos;t there can still understand the room. The first one starts that
+              record.
+            </p>
           </div>
         </div>
       </section>
 
-      <section id="community" className="px-5 py-20 sm:px-8 lg:px-10">
+      {/* Community */}
+      <section id="community" className="relative z-10 px-5 py-20 sm:px-8 lg:px-10">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_0.9fr]">
           <div>
             <p className="font-(family-name:--font-mono) text-xs uppercase tracking-[0.24em] text-[--color-neon-purple]">
-              Community protocol
+              Community
             </p>
             <h2 className="mt-5 font-(family-name:--font-display) text-4xl font-semibold leading-tight text-[--color-fg] sm:text-5xl">
-              Good people is not branding. It is an operating requirement.
+              The room cares who&apos;s in it.
             </h2>
-          </div>
-          <div className="border-l border-[--color-rule] pl-6 text-base leading-[1.75] text-[--color-fg-muted]">
-            <p>
-              The site should make care legible before anyone buys a ticket: consent, sensory
-              expectations, entry details, transport, accessibility, and the social permission to
-              arrive quietly and still belong.
+            <p className="mt-6 max-w-xl text-base leading-[1.75] text-[--color-fg-muted]">
+              Consent practice, sensory expectations, entry details, transport, and accessibility
+              are on every event page — so you can arrive quietly, take the time you need, and still
+              belong.
             </p>
+          </div>
+
+          <div className="grid gap-3 self-start font-(family-name:--font-mono) text-xs uppercase tracking-[0.18em]">
+            <div className="border border-[--color-rule] bg-[color-mix(in_oklch,var(--color-panel)_70%,transparent)] p-5">
+              <p className="text-[--color-neon-green]">join the list</p>
+              <p className="mt-3 normal-case tracking-normal text-[0.8rem] text-[--color-fg-muted]">
+                Event announcements only. No re-marketing. Email channel arrives once the domain is
+                set — for now, watch the homepage.
+              </p>
+            </div>
+            <div className="border border-[--color-rule] bg-[color-mix(in_oklch,var(--color-panel)_70%,transparent)] p-5">
+              <p className="text-[--color-neon-blue]">arriving new</p>
+              <p className="mt-3 normal-case tracking-normal text-[0.8rem] text-[--color-fg-muted]">
+                Read the event page first. The information that matters lives there. If something
+                isn&apos;t answered, the page is wrong — tell us.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <aside className="sticky bottom-0 z-30 border-t border-[--color-rule] bg-[color-mix(in_oklch,var(--color-void)_88%,black)] px-5 py-3 backdrop-blur sm:px-8 lg:px-10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      {/* Promoters / artists */}
+      <section className="relative z-10 border-t border-[--color-rule] bg-[color-mix(in_oklch,var(--color-panel)_60%,transparent)] px-5 py-16 sm:px-8 lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="font-(family-name:--font-mono) text-[0.68rem] uppercase tracking-[0.22em] text-[--color-neon-green]">
-              tap once to enter the sound layer
+            <p className="font-(family-name:--font-mono) text-xs uppercase tracking-[0.24em] text-[--color-neon-purple]">
+              Artists &amp; promoters
             </p>
-            <p className="mt-1 text-sm text-[--color-fg]">
-              Now holding: threshold / rights-cleared queue
-            </p>
+            <h2 className="mt-4 max-w-2xl font-(family-name:--font-display) text-3xl font-semibold leading-tight text-[--color-fg] sm:text-4xl">
+              Caldera reads every email. Tell us what you&apos;re holding and what you need.
+            </h2>
           </div>
-          <div className="flex items-center gap-2 font-(family-name:--font-mono) text-xs uppercase tracking-[0.14em]">
-            <span className="border border-[--color-neon-purple] px-3 py-2 text-[--color-neon-purple]">
-              pause
-            </span>
-            <span className="h-2 w-28 overflow-hidden border border-[--color-rule] sm:w-40">
-              <span className="block h-full w-1/2 bg-[--color-neon-blue]" />
-            </span>
-            <span className="text-[--color-fg-muted]">02:18</span>
-          </div>
+          <p className="max-w-md text-sm leading-[1.7] text-[--color-fg-muted]">
+            Who you are, where you&apos;ve played, what you&apos;re holding, what you need — sent to
+            a human, replied to personally. The promoter contact lives on the homepage once the
+            domain is set.
+          </p>
         </div>
-      </aside>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-[--color-rule] bg-[--color-bg] px-5 py-10 sm:px-8 lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 font-(family-name:--font-mono) text-[0.7rem] uppercase tracking-[0.2em] text-[--color-fg-muted] md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-1">
+            <span className="text-[--color-fg]">caldera ╱╱ psydney</span>
+            <span>Sydney, Australia · built for the good people</span>
+          </div>
+          <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <a href="#sound" className="transition-colors hover:text-[--color-neon-green]">
+              Sound
+            </a>
+            <a href="#events" className="transition-colors hover:text-[--color-neon-blue]">
+              Events
+            </a>
+            <a href="#community" className="transition-colors hover:text-[--color-neon-purple]">
+              Community
+            </a>
+            <a href="/legal" className="transition-colors hover:text-[--color-fg]">
+              Legal
+            </a>
+            <span className="text-[--color-fg-muted]/60">©{new Date().getFullYear()}</span>
+          </nav>
+        </div>
+      </footer>
+
+      <PlayerBar />
     </main>
   );
 }
