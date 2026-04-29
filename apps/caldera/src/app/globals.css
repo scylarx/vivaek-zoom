@@ -1,0 +1,257 @@
+@import "tailwindcss";
+
+/*
+ * Caldera — design tokens.
+ * Dark by default, light-mode counterpart, neon-as-outline.
+ * See apps/caldera/ARCHITECTURE.md § "Visual identity".
+ */
+
+@theme {
+  /* DARK (default) */
+  --color-void: oklch(8% 0.025 290);
+  --color-panel: oklch(11% 0.04 290);
+  --color-panel-elevated: oklch(14% 0.045 290);
+  --color-ink: oklch(92% 0.005 280);
+  --color-ink-muted: oklch(70% 0.01 280);
+  --color-rule: oklch(20% 0.025 285);
+
+  /* Neon accents — outlines + glows, not solid fills */
+  --color-neon-purple: oklch(67% 0.27 305);
+  --color-neon-blue: oklch(63% 0.22 257);
+  --color-neon-green: oklch(72% 0.18 162);
+
+  /* Functional aliases */
+  --color-bg: var(--color-void);
+  --color-bg-elevated: var(--color-panel);
+  --color-fg: var(--color-ink);
+  --color-fg-muted: var(--color-ink-muted);
+  --color-accent: var(--color-neon-purple);
+
+  /* Typography */
+  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
+
+  /* Type scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.5rem;
+  --text-4xl: 3.5rem;
+  --text-5xl: 5rem;
+  --text-6xl: 7rem;
+  --text-7xl: 9rem;
+}
+
+/* LIGHT mode — same hues, inverted base, neons desaturated */
+:root[data-theme="light"] {
+  --color-void: oklch(98% 0.005 80);
+  --color-panel: oklch(95% 0.008 80);
+  --color-panel-elevated: oklch(92% 0.01 80);
+  --color-ink: oklch(15% 0.01 280);
+  --color-ink-muted: oklch(40% 0.012 280);
+  --color-rule: oklch(85% 0.012 80);
+  --color-neon-purple: oklch(50% 0.22 305);
+  --color-neon-blue: oklch(48% 0.18 257);
+  --color-neon-green: oklch(50% 0.16 162);
+}
+
+:root {
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Faint scanline texture for the crypto-degenerate vibe */
+  background-image: repeating-linear-gradient(
+    0deg,
+    color-mix(in oklch, var(--color-neon-purple) 1.5%, transparent) 0,
+    color-mix(in oklch, var(--color-neon-purple) 1.5%, transparent) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* Reduced motion + sensory-light mode */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.001ms;
+    scroll-behavior: auto;
+  }
+}
+
+:root[data-sensory="light"] body {
+  background-image: none;
+}
+
+::selection {
+  background: var(--color-neon-purple);
+  color: var(--color-void);
+}
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-neon-green);
+  outline-offset: 4px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  transform: translateY(-150%);
+  border: 1px solid var(--color-neon-green);
+  background: var(--color-void);
+  color: var(--color-fg);
+  padding: 0.75rem 1rem;
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Mandala rotation — slow, hypnotic */
+@keyframes caldera-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mandala-rotate {
+  animation: caldera-rotate 90s linear infinite;
+  transform-origin: center;
+}
+
+.caldera-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-neon-purple),
+    var(--color-neon-blue) 48%,
+    var(--color-neon-green)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 36px color-mix(in oklch, var(--color-neon-blue) 22%, transparent);
+}
+
+.caldera-glow {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(72px);
+  opacity: 0.24;
+}
+
+.caldera-glow-one {
+  top: 8rem;
+  right: -9rem;
+  width: 28rem;
+  height: 28rem;
+  background: var(--color-neon-purple);
+}
+
+.caldera-glow-two {
+  bottom: 12rem;
+  left: -10rem;
+  width: 30rem;
+  height: 30rem;
+  background: var(--color-neon-green);
+}
+
+.audio-console {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--color-neon-purple) 9%, transparent),
+      transparent 38%
+    ),
+    linear-gradient(
+      225deg,
+      color-mix(in oklch, var(--color-neon-green) 8%, transparent),
+      transparent 42%
+    ),
+    color-mix(in oklch, var(--color-panel) 88%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklch, var(--color-neon-blue) 14%, transparent),
+    0 0 48px color-mix(in oklch, var(--color-neon-purple) 10%, transparent);
+}
+
+.event-slab {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--color-neon-blue) 10%, transparent),
+      transparent 38%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in oklch, var(--color-neon-purple) 11%, transparent) 0,
+      color-mix(in oklch, var(--color-neon-purple) 11%, transparent) 1px,
+      transparent 1px,
+      transparent 22px
+    ),
+    color-mix(in oklch, var(--color-panel) 82%, transparent);
+}
+
+.track-dot {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  box-shadow: 0 0 18px currentColor;
+}
+
+.track-dot-purple {
+  background: var(--color-neon-purple);
+  color: var(--color-neon-purple);
+}
+
+.track-dot-blue {
+  background: var(--color-neon-blue);
+  color: var(--color-neon-blue);
+}
+
+.track-dot-green {
+  background: var(--color-neon-green);
+  color: var(--color-neon-green);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mandala-rotate {
+    animation: none;
+  }
+
+  .caldera-gradient {
+    text-shadow: none;
+  }
+}

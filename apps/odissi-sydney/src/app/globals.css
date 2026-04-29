@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+/*
+ * Odissi Sydney — design tokens.
+ * Konark sandstone + temple-interior palette. NOT Bollywood/festival brights.
+ * See apps/odissi-sydney/ARCHITECTURE.md § "Color tokens".
+ */
+
+@theme {
+  /* Neutrals (Konark sandstone family) */
+  --color-stone-cream: oklch(91% 0.025 80); /* primary background */
+  --color-stone-cream-soft: oklch(94% 0.018 80); /* elevated surfaces */
+  --color-stone-warm: oklch(78% 0.06 65); /* sandstone ochre */
+  --color-stone-shadow: oklch(20% 0.015 50); /* near-black brown */
+
+  /* Jewel accents — used sparingly, like a sari border */
+  --color-jewel-maroon: oklch(36% 0.13 25);
+  --color-jewel-teal: oklch(38% 0.07 220);
+  --color-jewel-aubergine: oklch(28% 0.1 320);
+
+  /* Single CTA accent (alta-red — one thing per page max) */
+  --color-alta: oklch(46% 0.16 25);
+
+  /* Metallic — silver, never yellow gold */
+  --color-tarakasi-silver: oklch(74% 0.005 90);
+
+  /* Functional */
+  --color-bg: var(--color-stone-cream);
+  --color-bg-elevated: var(--color-stone-cream-soft);
+  --color-ink: var(--color-stone-shadow);
+  --color-ink-muted: oklch(40% 0.015 50);
+  --color-rule: oklch(80% 0.02 65);
+
+  /* Typography (CSS variables set by next/font in layout.tsx) */
+  --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-source-serif), Georgia, "Times New Roman", serif;
+
+  /* Type scale — editorial, not dashboard */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.125rem; /* 18px body — AAA target */
+  --text-lg: 1.3125rem;
+  --text-xl: 1.625rem;
+  --text-2xl: 2.125rem;
+  --text-3xl: 2.875rem;
+  --text-4xl: 3.875rem;
+  --text-5xl: 5rem;
+  --text-6xl: 6.5rem;
+
+  /* Reading column */
+  --container-prose: 65ch;
+}
+
+/* Page reset — light-mode only by design (see ARCHITECTURE.md § Accessibility) */
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Honour reduced motion globally — see ARCHITECTURE.md § Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.001ms;
+    scroll-behavior: auto;
+  }
+}
+
+::selection {
+  background: var(--color-jewel-teal);
+  color: var(--color-stone-cream);
+}
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-jewel-teal);
+  outline-offset: 4px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  transform: translateY(-150%);
+  border: 1px solid var(--color-jewel-maroon);
+  background: var(--color-bg);
+  color: var(--color-ink);
+  padding: 0.75rem 1rem;
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.odissi-orb {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(48px);
+  opacity: 0.2;
+}
+
+.odissi-orb-maroon {
+  top: 7rem;
+  right: -8rem;
+  width: 24rem;
+  height: 24rem;
+  background: var(--color-jewel-maroon);
+}
+
+.odissi-orb-teal {
+  bottom: -8rem;
+  left: -8rem;
+  width: 22rem;
+  height: 22rem;
+  background: var(--color-jewel-teal);
+}
+
+.temple-panel {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--color-stone-cream-soft) 88%, transparent),
+      transparent
+    ),
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in oklch, var(--color-stone-warm) 16%, transparent) 0,
+      color-mix(in oklch, var(--color-stone-warm) 16%, transparent) 1px,
+      transparent 1px,
+      transparent 26px
+    );
+}

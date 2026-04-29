@@ -1,0 +1,26 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["tsconfig.base.json", "biome.json", ".nvmrc"],
+  "globalEnv": ["NODE_ENV", "VERCEL_ENV", "VERCEL_URL"],
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "out/**", "dist/**"],
+      "env": ["NEXT_PUBLIC_*", "SANITY_*", "RESEND_*", "SPOTIFY_*", "DATABASE_URL"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "lint": {
+      "outputs": []
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

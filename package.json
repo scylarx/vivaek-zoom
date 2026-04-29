@@ -1,0 +1,30 @@
+{
+  "name": "vivaekzoom",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Monorepo for odissi-sydney and caldera. See README.md.",
+  "packageManager": "bun@1.2.0",
+  "engines": {
+    "bun": ">=1.2.0",
+    "node": ">=22.11.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "typecheck": "turbo run typecheck",
+    "format": "biome format --write .",
+    "test": "turbo run test",
+    "clean": "turbo run clean && rm -rf node_modules .turbo"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.0",
+    "turbo": "^2.5.0",
+    "typescript": "^5.7.0"
+  }
+}

@@ -33,10 +33,10 @@ The architecture docs are written to brief any agent picking up the work cold. I
 
 | Layer | Choice | Why |
 |---|---|---|
-| Runtime | Node 22 LTS | Latest LTS at time of authoring; pinned via `.nvmrc`. |
-| Package manager | pnpm 9 | Workspace support, fast, deterministic. |
-| Monorepo | Turborepo 2 | Caches builds locally + remotely on Vercel. |
-| Framework | **Next.js 16** | App Router only. Turbopack stable for dev + build. PPR + `after()` available. |
+| Toolchain | **Bun 1.2+** | Single tool: install, run, bundle, test. Replaces npm/yarn/pnpm + jest/vitest + ts-node + nodemon. `bun.lock` is committed. |
+| Runtime (Vercel build/SSR) | Node 22 LTS | Vercel still runs Next.js builds and serverless functions on Node. Bun is the install tool; Node is the production runtime. |
+| Monorepo orchestrator | Turborepo 2.5+ | Task graph + local + remote cache. Reads Bun workspaces natively. |
+| Framework | **Next.js 16** | App Router only. Turbopack default for dev + build. PPR + `after()` available. |
 | UI runtime | **React 19** | Server Components stable, `use()`, `useOptimistic`, ref-as-prop, React Compiler stable. |
 | Compiler | React Compiler (stable) | Auto-memoization. No more manual `useMemo`/`useCallback`. |
 | Language | TypeScript 5.7+ strict | `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes` on. |
@@ -46,12 +46,14 @@ The architecture docs are written to brief any agent picking up the work cold. I
 | 3D (Caldera only) | react-three-fiber + drei + leva | Mandala. WebGL with mobile fallback. |
 | Audio (Caldera only) | Howler.js + Zustand 5 | See `apps/caldera/ARCHITECTURE.md` §Audio. |
 | Lint/format | Biome 2 | Single tool, fast. ESLint-Next rules layered only where Biome lacks coverage. |
+| Tests | `bun test` | Native, fast, Jest-compatible API. No Vitest, no Jest. |
 | Validation | Zod 4 | Runtime + type inference. |
 | CMS | Sanity v3 | Both apps. Non-dev-friendly editing for parents and event content. |
 | Email | Resend | Contact form delivery. |
 | Deploy | Vercel | One project per app. Root Directory set per project. |
 
 **Hard rules for any agent in this repo:**
+- No npm. No pnpm. No yarn. **Bun only.** `bun install`, `bun add`, `bun run`, `bun test`. The lockfile is `bun.lock` and it is committed.
 - No Pages Router. Ever. App Router only.
 - No `forwardRef` boilerplate when ref-as-prop works (React 19).
 - No manual memoization unless React Compiler explicitly bails out (verify with the compiler's healthcheck output).
@@ -59,31 +61,32 @@ The architecture docs are written to brief any agent picking up the work cold. I
 - No `<img>`/`<a>` for internal — use `next/image` and `next/link`.
 - No client components unless the file genuinely needs interactivity, browser APIs, or hooks. Default to Server Components.
 - No "just install another library" without checking if Next/React 19 already provides it.
+- No Vitest, Jest, ts-node, nodemon — Bun handles all of these natively.
 
 ---
 
 ## First-time setup
 
 ```bash
-# 1. Install Node 22 (use fnm, nvm, or volta)
-node --version  # should be v22.x
+# 1. Install Bun (one-liner from https://bun.sh)
+curl -fsSL https://bun.sh/install | bash
+bun --version          # 1.2+ required
 
-# 2. Install pnpm 9
-corepack enable
-corepack prepare pnpm@latest --activate
+# 2. Install Node 22 (Vercel still uses it for Next runtime; we keep it on path)
+#    Use fnm / nvm / volta — your call. .nvmrc pins to 22.
 
-# 3. Install workspace deps (once apps are scaffolded)
-pnpm install
+# 3. Install workspace deps
+bun install
 
-# 4. Run a single app
-pnpm --filter odissi-sydney dev
-pnpm --filter caldera dev
+# 4. Run one app
+bun run --filter odissi-sydney dev
+bun run --filter caldera dev
 
-# 5. Or run both via Turborepo
-pnpm dev
+# 5. Or run both in parallel via Turborepo
+bun run dev
 ```
 
-Apps are not yet scaffolded — that's the next wave of work, after the architecture is approved. See `ARCHITECTURE.md` § "Next wave".
+Apps were scaffolded in wave 1. See `apps/*/README.md` for per-app commands.
 
 ---
 
@@ -93,12 +96,12 @@ Apps are not yet scaffolded — that's the next wave of work, after the architec
 .
 ├── README.md                        ← you are here
 ├── ARCHITECTURE.md                  ← monorepo-level architecture
-├── package.json                     ← workspace root, scripts, dev tooling
-├── pnpm-workspace.yaml              ← workspace globs
+├── package.json                     ← workspace root (Bun workspaces in `workspaces` field)
+├── bun.lock                         ← committed; do not edit by hand
 ├── turbo.json                       ← Turborepo pipeline
 ├── tsconfig.base.json               ← shared TS config (apps extend this)
 ├── biome.json                       ← lint + format config
-├── .nvmrc                           ← Node version pin
+├── .nvmrc                           ← Node version pin (Vercel-side runtime)
 ├── .editorconfig
 ├── .gitignore
 └── apps/
@@ -124,7 +127,12 @@ Two Vercel projects, one Git repo:
 | `odissi-sydney` | `apps/odissi-sydney` | `main` | `odissisydney.com` (cutover when ready) |
 | `caldera` | `apps/caldera` | `main` | TBC |
 
-Vercel handles monorepo deploys natively — set "Root Directory" in project settings. Each app builds and deploys only when its files change (Turborepo + Vercel ignored-build-step integration).
+Per-project Vercel settings:
+- **Install Command**: `bun install --frozen-lockfile`
+- **Build Command**: `cd ../.. && bun run turbo build --filter=<project-name>`
+- **Output Directory**: `.next` (default; Vercel auto-detects)
+
+Vercel auto-detects `bun.lock` and uses Bun for install. The Next.js build runs on Vercel's Node 22 runtime (Bun is install-only on Vercel today). Each app deploys only when its files change (Turborepo cache + Vercel ignored-build-step).
 
 Preview deploys: every PR/branch gets a `*.vercel.app` URL per app.
 
@@ -145,10 +153,10 @@ This repo is built to be worked on with Claude Code (or similar). Conventions:
 
 | Wave | What | Status |
 |---|---|---|
-| 0 — Planning | Pull existing Odissi content, write architecture docs, decide stack | ✓ Done (this commit) |
-| 1 — Scaffold | `create-next-app` both apps, wire up Sanity, deploy hello-worlds to Vercel | Next |
-| 2 — Odissi build | Implement IA, design system, content model, contact, deploy | Pending |
-| 3 — Caldera build | Implement audio system, mandala, events, deploy | Pending |
+| 0 — Planning | Pull existing Odissi content, write architecture docs, decide stack | ✓ Done |
+| 1 — Scaffold | Next 16 + React 19 + Tailwind v4 apps with design tokens, hello-worlds running locally | ✓ Done |
+| 2 — Odissi build | Sanity wire-up, IA, design system completion, content, contact, Vercel deploy | Next — fan out to agents |
+| 3 — Caldera build | Sanity wire-up, audio system, 3D mandala, events, Vercel deploy | Next — fan out to agents |
 | 4 — Cutover | Domain switch for odissisydney.com once parents approve | Pending |
 
-The scope of this commit is **planning artefacts only**. No app code is written yet — that comes in wave 1, after the architecture is reviewed.
+After wave 1, each app's `ARCHITECTURE.md` is the brief for a fan-out of focused agents — one per concern (design system, content model, audio, 3D, contact, etc.) — running in parallel where the work doesn't intersect.
