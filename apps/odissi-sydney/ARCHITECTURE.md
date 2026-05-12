@@ -236,7 +236,7 @@ ALEG mission. Who it serves. The Dance for Humanity program. Eligibility. Partne
 
 ### `/contact`
 
-Form: name, email, phone, message, "What are you reaching out about?" select (general / classes / charity / press / donation). Submit via Server Action → Web3Forms → destination configured in the Web3Forms dashboard (temporary while register.com DNS access for Resend domain verification is being recovered). Reply-To is the submitter's email. Honeypot field for spam. No Captcha (friction > value at this scale).
+Form: name, email, phone, message, "What are you reaching out about?" select (general / classes / charity / press / donation). Submit via Server Action → Basin (`usebasin.com`) → destination configured in the Basin dashboard. Reply-To is the submitter's email. Honeypot field for spam. No Captcha (friction > value at this scale).
 
 ---
 
@@ -282,7 +282,7 @@ Vercel Analytics (privacy-respecting, cookieless). No Google Analytics, no Meta 
 
 ## Email & forms
 
-- Web3Forms for transactional sending (contact form → family inbox) as a stop-gap; Resend client + React Email template (`@react-email/components`) are still in the tree at `src/lib/email/*` for easy revert once register.com DNS access is recovered and the `odissisydney.com` Resend domain is verified.
+- Basin (`usebasin.com`) for contact-form delivery → family inbox. Service-agnostic `CONTACT_FORM_ENDPOINT` env var. Resend client + React Email template (`@react-email/components`) are parked in `src/lib/email/*` as unused code; safe to delete if the dormancy bothers you, but they're tree-shaken from the bundle so they cost nothing.
 - Form state: `useFormStatus` for pending, server-side validation with Zod, errors returned to the form.
 
 ---

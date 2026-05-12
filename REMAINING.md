@@ -2,7 +2,7 @@
 
 What's left before either site can go live, what's parked behind ecosystem decisions, and what I'd ask for next.
 
-Last updated: 2026-04-30 (after the wave 2–3 build + Caldera transcendence pass).
+Last updated: 2026-05-12 (after the soft-launch deploy, Basin pivot, and DNS discovery).
 
 The repo currently builds clean for both apps (`bun run typecheck`, `bun x biome check .`, `bun run build`). Nothing here is *broken*. These are gaps between "builds" and "ready for the people whose names are on the work."
 
@@ -14,9 +14,9 @@ These can't be unblocked by code. They need a decision from Nirmal, Chitrita, or
 
 ### Odissi Sydney
 
-- **Domain cutover.** `odissisydney.com` cuts over only after Nirmal and Chitrita see the live preview end-to-end and approve. Until then, the new site lives at a `*.vercel.app` URL.
-- **Confirm contact email(s).** The existing site shows `[email protected]` placeholders. The Server Action reads `CONTACT_DESTINATION_EMAIL` from env — it's currently unset. Need the actual address(es) to point form submissions at.
-- **Resend sender domain.** Currently defaults to `onboarding@resend.dev` (Resend sandbox). Resend will reject sends in production until a verified domain exists. After domain cutover, add `RESEND_FROM_EMAIL=<address>@odissisydney.com` and verify the domain inside Resend.
+- **Domain cutover.** `odissisydney.com` cuts over only after Nirmal and Chitrita see the live preview end-to-end and approve. Until then, the new site lives at https://odissi-sydney.vercel.app. **DNS access is no longer blocked** — Weebly's DNS panel can edit the A/CNAME records that route the domain (even though register.com is the underlying registrar). Runbook: see `## Domain cutover runbook` below.
+- **~~Confirm contact email(s).~~** Done. Family confirmed `odcsydney@yahoo.com.au`; Basin form delivers there directly.
+- **Photography rights / hotlinked images.** Four homepage images currently `src` from `https://www.odissisydney.com/uploads/...` (Weebly's CDN under the domain). The moment DNS cuts to Vercel, those URLs 404. Hard prerequisite for cutover. Path: (a) get rights confirmation from Rudolf Rindler for ongoing reuse, then (b) download the originals to `apps/odissi-sydney/public/images/` and update the `src` paths in `src/app/page.tsx`. Until both are done, **do not cut DNS**.
 - **ALEG bank details.** BSB / account number are deliberately *not* rendered on the `/charity` page. Donate flow currently routes to the contact form. Before publishing bank details, confirm with Nirmal and Chitrita that they want them on the public page (vs. handled per-enquiry).
 - **Gamilaroi Aboriginal Elder & Mentor — naming.** The existing site lists this partner role anonymously. The rebuild does the same. Confirm whether the family wants this person publicly named.
 - **Photography rights.** `next/image` currently serves the four images directly from the existing `odissisydney.com` Weebly URLs. Once the domain cuts over, these URLs will break. We need either: (a) the original files (Rudolf Rindler is credited — confirm his licence covers reuse); or (b) commissioned new shoots; or (c) a transition plan.
@@ -40,6 +40,61 @@ These can't be unblocked by code. They need a decision from Nirmal, Chitrita, or
 
 ---
 
+## Domain cutover runbook
+
+Procedure for flipping `odissisydney.com` from the old Weebly site to the new Vercel build. Don't start until **all** the prerequisites are green. The cutover itself is reversible (DNS rollback works), but the prerequisites are not.
+
+### Prerequisites — do these before touching DNS
+
+1. **Family approval to publish.** Nirmal and Chitrita have reviewed https://odissi-sydney.vercel.app end-to-end and signed off.
+2. **Photography rights resolved.** See `Hard launch blockers → Photography rights` above. The four `https://www.odissisydney.com/uploads/...` image URLs in `apps/odissi-sydney/src/app/page.tsx` (lines 21/27/33/39 as of 2026-05-12) will 404 the instant DNS flips. Either (a) download originals to `apps/odissi-sydney/public/images/` and update the src paths, or (b) have a replacement source ready to swap in same-day.
+3. **Final smoke test on `.vercel.app` URL.** Form submission, all sections load, no console errors, mobile and desktop. The .vercel.app and odissisydney.com behave identically once cut over — last chance to catch issues without users seeing them.
+4. **Family knows the timing.** DNS propagation can be 5 minutes or 6 hours. Email forwarding (`contact@odissisydney.com` → `odcsydney@yahoo.com.au`) is on Google Workspace MX records — unaffected by the cutover — so they'll still receive normal emails throughout.
+
+### Cutover steps
+
+**Step 1 — add the domain in Vercel** (no traffic impact yet)
+
+1. Vercel dashboard → `odissi-sydney` project → **Settings** → **Domains** → **Add**.
+2. Enter `odissisydney.com`. Vercel registers it as a domain on the project but DNS still points to Weebly so nothing changes for visitors yet.
+3. Vercel shows the DNS records needed:
+   - For root (`odissisydney.com`): **A record** to `76.76.21.21` (Vercel's anycast).
+   - Vercel may alternatively recommend an `ALIAS` / `ANAME` if the DNS provider supports it. Weebly probably doesn't — stick with the A record.
+4. Add `www.odissisydney.com` similarly. Vercel will show a **CNAME** target like `cname.vercel-dns.com`.
+5. Both domains will show "Invalid Configuration" — that's expected until DNS flips.
+
+**Step 2 — change DNS in Weebly's panel**
+
+1. In Weebly's DNS editor, find the existing A record for `@` / root / `odissisydney.com`. Currently value `199.34.228.159` (Weebly's server).
+2. Change the value to `76.76.21.21`. Save.
+3. Find the existing CNAME (or A record) for `www`. Change its value to `cname.vercel-dns.com` (or whatever Vercel showed in step 1).
+4. **Do not touch:** any `MX` record (Google Workspace email keeps working), any `TXT` record (SPF, DKIM, domain ownership records stay intact), nameservers (NS) — leave at `register.com`.
+
+**Step 3 — wait and verify**
+
+1. DNS propagation usually 5 min – 1 hour, occasionally longer. Check via `Resolve-DnsName odissisydney.com -Server 8.8.8.8` — when it returns `76.76.21.21`, the flip has taken.
+2. Vercel auto-issues an SSL certificate via Let's Encrypt within minutes of DNS validating.
+3. Visit `https://odissisydney.com` and `https://www.odissisydney.com`. Both should serve the new site with a green padlock.
+4. Visit `https://odissi-sydney.vercel.app` — should still work; Vercel keeps the .vercel.app URL alive permanently as a backup share link.
+5. Send a test email to `contact@odissisydney.com` from any external address — should land in `odcsydney@yahoo.com.au` (forwarding via Google Workspace MX, untouched by the cutover).
+6. Submit the contact form on the new live site — should land in `odcsydney@yahoo.com.au` via Basin (untouched by the cutover).
+
+### Rollback
+
+If anything goes wrong:
+
+1. In Weebly's DNS panel, change the A record for `@` back to `199.34.228.159` and the `www` CNAME back to whatever its original Weebly value was (write it down before changing it in step 2).
+2. Save. Within propagation time, the old site is back.
+3. The new build stays at `https://odissi-sydney.vercel.app` regardless — Vercel doesn't delete the .vercel.app URL on a domain detach.
+
+### Post-cutover
+
+- Remove the four hotlinked image URLs from `page.tsx` (already done in prerequisites) and from any caches — `next build` already inlines them.
+- Confirm Google Search Console / Bing Webmaster pick up the new content (submit the sitemap at `https://odissisydney.com/sitemap.xml`).
+- The old Weebly *editor* still exists for the family — they can choose to either delete the Weebly site, or keep it as a backup that isn't reachable via the domain. Either is fine; the domain isn't pointing at it anymore.
+
+---
+
 ## Engineering follow-ups — we can resolve these
 
 ### Caldera
@@ -54,7 +109,7 @@ These can't be unblocked by code. They need a decision from Nirmal, Chitrita, or
 
 - **`/classes`, `/guru`, `/testimonials` routes.** Currently each is a section on the homepage. As Sanity content fills out, give each its own route with deeper structure. The schemas already support it (`class.slug`, etc.). The homepage sections become summaries that link out.
 - **Gallery.** Four images on the homepage in a translate-y-staggered grid. A dedicated `/gallery` page showing the full body of work (with photographer credit per image) when more imagery is approved.
-- **Contact form delivery.** Verify the form actually sends to a real inbox once `RESEND_API_KEY` and `CONTACT_DESTINATION_EMAIL` are set. The Server Action returns a discriminated union — error states are wired but untested in production.
+- **~~Contact form delivery.~~** Done. Submissions go via Basin (`usebasin.com/f/85cb66252bf5`) → `odcsydney@yahoo.com.au`. Verified end-to-end 2026-05-12. Basin is the permanent choice (family is happy with it).
 - **Structured data verification.** The `/charity` page emits `EducationalOrganization` JSON-LD with the ABN as `identifier`. Verify against Google Rich Results Test once the production URL is set.
 
 ### Both
