@@ -65,10 +65,23 @@ Procedure for flipping `odissisydney.com` from the old Weebly site to the new Ve
 
 **Step 2 — change DNS in Weebly's panel**
 
-1. In Weebly's DNS editor, find the existing A record for `@` / root / `odissisydney.com`. Currently value `199.34.228.159` (Weebly's server).
-2. Change the value to `76.76.21.21`. Save.
-3. Find the existing CNAME (or A record) for `www`. Change its value to `cname.vercel-dns.com` (or whatever Vercel showed in step 1).
-4. **Do not touch:** any `MX` record (Google Workspace email keeps working), any `TXT` record (SPF, DKIM, domain ownership records stay intact), nameservers (NS) — leave at `register.com`.
+Records currently on the domain (snapshot 2026-05-12):
+
+| Type    | Host                   | Points to                                         | Action            |
+|---------|------------------------|---------------------------------------------------|-------------------|
+| A       | `@`                    | `199.34.228.159` (Weebly)                         | **CHANGE** → `76.76.21.21` |
+| A       | `www`                  | `199.34.228.159` (Weebly)                         | **CHANGE** → `76.76.21.21` |
+| A       | `*` (wildcard)         | `199.34.228.159` (Weebly)                         | **DELETE** — see note below |
+| CNAME   | `7wdwa6lz3l2u`         | `gv-cjzk2hzhztwofh.dv.googlehosted.com`           | Keep — Google Workspace domain verification |
+| HTTP302 | `mail`                 | `http://mail.google.com/a/odissisydney.com`       | Keep — webmail redirect for `mail.odissisydney.com` |
+| MX (10) | `@`                    | `aspmx.l.google.com`                              | Keep — primary inbound mail |
+| MX (20) | `@`                    | `alt1.aspmx.l.google.com`, `alt2.aspmx.l.google.com` | Keep |
+| MX (30) | `@`                    | `aspmx{2,3,4,5}.googlemail.com`                   | Keep — fallback inbound |
+| MX (10) | `resend`               | `feedback-smtp.ap-northeast-1.amazonses.com`      | Dormant. Safe to delete (we're not using Resend). Leaving it does no harm either. |
+
+**Why delete the wildcard A `*` instead of changing it?** Today the wildcard catches every unspecified subdomain (`anything.odissisydney.com`) and routes to Weebly. After cutover, you don't want random subdomains silently serving the new site either — that's how confusing URLs get indexed by Google. Cleaner to just delete the wildcard so unknown subdomains 404 normally. If you ever need a wildcard later (e.g. preview deploys on `pr-*.odissisydney.com`), add it back consciously.
+
+**Don't touch nameservers.** Leave them at `dns1.register.com` / `dns2.register.com` — those are register.com's DNS servers acting as the authoritative source. Weebly's panel pushes changes to them behind the scenes.
 
 **Step 3 — wait and verify**
 
@@ -160,13 +173,15 @@ If anything goes wrong:
 
 In this order:
 
-1. The contact email(s) the form should send to.
-2. Their reaction to the live preview — anything that reads wrong, anything missing.
-3. Photography permissions: are the existing site's images cleared for ongoing reuse, do we need new shoots?
-4. ALEG donations: should bank details be on `/charity` publicly, or kept per-enquiry?
-5. Gamilaroi Elder: name publicly, or keep as the role-only attribution?
+1. Their reaction to the live preview at https://odissi-sydney.vercel.app — anything that reads wrong, anything missing.
+2. Photography permissions: are the existing site's images cleared for ongoing reuse, do we need new shoots?
+3. ALEG donations: should bank details be on `/charity` publicly, or kept per-enquiry?
+4. Gamilaroi Elder: name publicly, or keep as the role-only attribution?
+5. Full NIDA / Gavin Robins testimonial quote.
 6. Class schedule: published, or "by enquiry" (we currently show "by enquiry" implicitly)?
 7. Anything that's changed since the existing site was written that should be updated.
+
+(Contact email is sorted — Basin → `odcsydney@yahoo.com.au`. Domain ownership is also sorted — registrant is Chitrita Mukerjee with `odcsydney@yahoo.com.au` as contact; renewal notices in mid-June 2026 will go straight to that inbox.)
 
 ## What I'd ask the Caldera owner next
 
