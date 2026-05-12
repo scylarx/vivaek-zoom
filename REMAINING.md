@@ -14,14 +14,15 @@ These can't be unblocked by code. They need a decision from Nirmal, Chitrita, or
 
 ### Odissi Sydney
 
-- **Domain cutover.** `odissisydney.com` cuts over only after Nirmal and Chitrita see the live preview end-to-end and approve. Until then, the new site lives at https://odissi-sydney.vercel.app. **DNS access is no longer blocked** — Weebly's DNS panel can edit the A/CNAME records that route the domain (even though register.com is the underlying registrar). Runbook: see `## Domain cutover runbook` below.
+**As of 2026-05-12, all content/family-input items are resolved. The only thing standing between the site and `odissisydney.com` is the actual DNS flip per the runbook below.**
+
+- **~~Domain cutover approval.~~** Family is happy with the live preview at https://odissi-sydney.vercel.app and have signed off. DNS edit access is via Weebly's domain panel — no separate register.com login needed. Runbook: see `## Domain cutover runbook` below.
 - **~~Confirm contact email(s).~~** Done. Family confirmed `odcsydney@yahoo.com.au`; Basin form delivers there directly.
-- **Photography rights.** Cutover blocker is resolved (2026-05-12) — the four homepage images are now self-hosted at `apps/odissi-sydney/public/images/`, the Weebly hotlinks are gone, and a DNS flip no longer 404s them. What remains is the *licensing* question: the two NIDA photos are credited to Rudolf Rindler, and the family doesn't have his reuse permission for the new site on record. Recommended: a one-line email to Rudolf confirming that the existing licence covers the rebuild. Not a hard launch blocker (the same images have been public on `odissisydney.com` for years) but worth getting in writing.
-- **ALEG bank details.** BSB / account number are deliberately *not* rendered on the `/charity` page. Donate flow currently routes to the contact form. Before publishing bank details, confirm with Nirmal and Chitrita that they want them on the public page (vs. handled per-enquiry).
-- **Gamilaroi Aboriginal Elder & Mentor — naming.** The existing site lists this partner role anonymously. The rebuild does the same. Confirm whether the family wants this person publicly named.
-- **Photography rights.** `next/image` currently serves the four images directly from the existing `odissisydney.com` Weebly URLs. Once the domain cuts over, these URLs will break. We need either: (a) the original files (Rudolf Rindler is credited — confirm his licence covers reuse); or (b) commissioned new shoots; or (c) a transition plan.
-- **Full NIDA / Gavin Robins testimonial.** The existing site truncates the quote. Before the testimonials surface ships in full, get the complete quote.
-- **Class details.** Existing site doesn't list days, times, or pricing. Decide whether the rebuild surfaces those, or stays with "by enquiry."
+- **~~Photography rights.~~** Cleared. Rudolf Rindler has confirmed reuse permission for the two NIDA photos. All four homepage images are self-hosted at `apps/odissi-sydney/public/images/`.
+- **~~ALEG bank details.~~** Decision: kept per-enquiry (donate flow routes through contact form). Matches what the rebuild already does.
+- **~~Gamilaroi Aboriginal Elder & Mentor — naming.~~** Decision: same as original site, kept as the role-only attribution.
+- **~~Full NIDA / Gavin Robins testimonial.~~** Decision: same as original site, kept as the truncated quote.
+- **~~Class details.~~** Decision: same as original site, "by enquiry" (no days/times/pricing surfaced).
 
 ### Caldera
 
@@ -35,8 +36,8 @@ These can't be unblocked by code. They need a decision from Nirmal, Chitrita, or
 ### Both apps
 
 - **Sanity project + dataset.** `SANITY_PROJECT_ID` and `SANITY_DATASET` are blank in both `.env.example` files. Create the Sanity projects (free tier is fine), set the IDs locally + on Vercel, and the studios + queries come alive.
-- **Vercel projects.** Two projects, one per app, both pointing at this repo. Set Root Directory per project (`apps/odissi-sydney`, `apps/caldera`). Install Command: `bun install --frozen-lockfile`. Build Command: `cd ../.. && bun run turbo build --filter=<project-name>`. See root `README.md` § "Deploy model".
-- **Vercel Analytics enable.** Cookieless. No Google / Meta / Hotjar — both audiences value dignity.
+- **Vercel projects.** ~~Odissi: done~~ (project `odissi-sydney`, prj_3cu0lvbXAtnKEdB22jQ72EQMfG7G, live at https://odissi-sydney.vercel.app since 2026-05-05). Caldera: still TBD.
+- **Vercel Analytics enable.** Cookieless. No Google / Meta / Hotjar — both audiences value dignity. ~~Odissi: components wired in `layout.tsx` (2026-05-12) — pending one-click enable in the Vercel dashboard (Settings → Analytics → Enable, Settings → Speed Insights → Enable). Free tier is sufficient.~~ Caldera: still TBD.
 
 ---
 
