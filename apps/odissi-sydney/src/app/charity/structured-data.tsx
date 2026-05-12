@@ -1,15 +1,17 @@
 // Server component — emits JSON-LD structured data for the /charity page.
 // Schema: EducationalOrganization (ALEG).
 
+import { siteUrl } from "@/app/seo";
+
 const structuredData = {
   "@context": "https://schema.org",
   "@type": ["EducationalOrganization", "NGO"],
-  "@id": "https://www.odissisydney.com/charity#aleg",
+  "@id": `${siteUrl}/charity#aleg`,
   name: "Arts & Life Education Gurukul Ltd",
   alternateName: "ALEG",
   description:
     "Australian registered charity with DGR status providing free and comprehensive training in Odissi dance, music, and life skills to young people experiencing financial hardship.",
-  url: "https://www.odissisydney.com/charity",
+  url: `${siteUrl}/charity`,
   identifier: {
     "@type": "PropertyValue",
     name: "ABN",

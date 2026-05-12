@@ -64,9 +64,9 @@ const structuredData = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.odissisydney.com/#organization",
+      "@id": `${siteUrl}/#organization`,
       name: "Odissi Sydney",
-      url: "https://www.odissisydney.com/",
+      url: `${siteUrl}/`,
       description:
         "Indian classical dance and vocal and instrumental music with master teacher Nirmal Jena in Sydney and the Blue Mountains.",
       founder: [
@@ -83,9 +83,9 @@ const structuredData = {
     },
     {
       "@type": "Person",
-      "@id": "https://www.odissisydney.com/#nirmal-jena",
+      "@id": `${siteUrl}/#nirmal-jena`,
       name: "Nirmal Jena",
-      url: "https://www.odissisydney.com/",
+      url: `${siteUrl}/`,
       image: `${siteUrl}/images/nirmal-b-w.jpg`,
       description:
         "Master teacher of Odissi Indian classical dance and Indian classical vocal and instrumental music.",
@@ -94,7 +94,7 @@ const structuredData = {
         name: "Guru Surendra Nath Jena",
       },
       worksFor: {
-        "@id": "https://www.odissisydney.com/#organization",
+        "@id": `${siteUrl}/#organization`,
       },
     },
     {

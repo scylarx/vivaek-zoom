@@ -1,4 +1,4 @@
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.odissisydney.com";
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://odissisydney.com";
 
 export const seo = {
   name: "Odissi Sydney",
