@@ -236,7 +236,7 @@ ALEG mission. Who it serves. The Dance for Humanity program. Eligibility. Partne
 
 ### `/contact`
 
-Form: name, email, phone, message, "What are you reaching out about?" select (general / classes / charity / press / donation). Submit via Server Action → Resend → `info@odissisydney.com` (or whichever email Nirmal/Chitrita prefer; current site has redacted addresses so confirm). Honeypot field for spam. No Captcha (friction > value at this scale).
+Form: name, email, phone, message, "What are you reaching out about?" select (general / classes / charity / press / donation). Submit via Server Action → Web3Forms → destination configured in the Web3Forms dashboard (temporary while register.com DNS access for Resend domain verification is being recovered). Reply-To is the submitter's email. Honeypot field for spam. No Captcha (friction > value at this scale).
 
 ---
 
@@ -282,8 +282,7 @@ Vercel Analytics (privacy-respecting, cookieless). No Google Analytics, no Meta 
 
 ## Email & forms
 
-- Resend for transactional sending (contact form → inbox).
-- React Email templates (`@react-email/components`) for the email body — server-rendered, plain, branded with the typography.
+- Web3Forms for transactional sending (contact form → family inbox) as a stop-gap; Resend client + React Email template (`@react-email/components`) are still in the tree at `src/lib/email/*` for easy revert once register.com DNS access is recovered and the `odissisydney.com` Resend domain is verified.
 - Form state: `useFormStatus` for pending, server-side validation with Zod, errors returned to the form.
 
 ---
@@ -291,7 +290,7 @@ Vercel Analytics (privacy-respecting, cookieless). No Google Analytics, no Meta 
 ## Deploy
 
 - Vercel project: `odissi-sydney`. Root Directory: `apps/odissi-sydney`.
-- Environment: `SANITY_PROJECT_ID`, `SANITY_DATASET`, `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `CONTACT_DESTINATION_EMAIL`.
+- Environment: `SANITY_PROJECT_ID`, `SANITY_DATASET`, `SANITY_API_READ_TOKEN`, `WEB3FORMS_ACCESS_KEY`, `NEXT_PUBLIC_SITE_URL`.
 - Domain cutover: only after Nirmal & Chitrita have reviewed the live preview and content end-to-end. Until then, the new site lives at a `*.vercel.app` URL.
 
 ---
