@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ContactForm } from "@/components/ContactForm";
+import { siteUrl } from "@/app/seo";
 
 const offerings = [
   {
@@ -18,26 +19,26 @@ const offerings = [
 
 const sourceImages = [
   {
-    src: "https://www.odissisydney.com/uploads/2/7/4/1/27417917/konark-panel-2.jpg",
-    alt: "Konark temple sculptural panel from the existing Odissi Sydney website",
+    src: "/images/konark-panel-2.jpg",
+    alt: "Konark temple sculptural panel",
     label: "Konark panel",
     className: "md:translate-y-10",
   },
   {
-    src: "https://www.odissisydney.com/uploads/2/7/4/1/27417917/img-6795.jpg",
+    src: "/images/img-6795.jpg",
     alt: "Students at the National Institute of Dramatic Art in Sydney, photo by Rudolf Rindler",
     label: "NIDA teaching",
     className: "",
   },
   {
-    src: "https://www.odissisydney.com/uploads/2/7/4/1/27417917/2021-03-26-n-n-354.jpg",
+    src: "/images/2021-03-26-n-n-354.jpg",
     alt: "Odissi teaching or performance moment at the National Institute of Dramatic Art in Sydney, photo by Rudolf Rindler",
     label: "Training",
     className: "md:translate-y-16",
   },
   {
-    src: "https://www.odissisydney.com/uploads/2/7/4/1/27417917/nirmal-b-w.jpg",
-    alt: "Black and white portrait of Nirmal Jena from the existing Odissi Sydney website",
+    src: "/images/nirmal-b-w.jpg",
+    alt: "Black and white portrait of Nirmal Jena",
     label: "Nirmal Jena",
     className: "md:translate-y-4",
   },
@@ -85,7 +86,7 @@ const structuredData = {
       "@id": "https://www.odissisydney.com/#nirmal-jena",
       name: "Nirmal Jena",
       url: "https://www.odissisydney.com/",
-      image: "https://www.odissisydney.com/uploads/2/7/4/1/27417917/nirmal-b-w.jpg",
+      image: `${siteUrl}/images/nirmal-b-w.jpg`,
       description:
         "Master teacher of Odissi Indian classical dance and Indian classical vocal and instrumental music.",
       parent: {
