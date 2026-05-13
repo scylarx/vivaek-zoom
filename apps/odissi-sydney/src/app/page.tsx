@@ -303,22 +303,22 @@ export default function HomePage() {
 
       <section
         id="classes"
-        className="bg-[--color-stone-shadow] px-5 py-20 text-[--color-stone-cream] sm:px-8 lg:px-12"
+        className="bg-[--color-stone-shadow] px-5 py-14 text-[--color-stone-cream] sm:px-8 sm:py-16 lg:px-12"
       >
         <div className="mx-auto max-w-7xl">
-          <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-10">
+          <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr] lg:gap-8">
             <div>
               <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-[--color-tarakasi-silver]">
                 Classes and rates
               </p>
-              <h2 className="mt-4 font-(family-name:--font-display) text-4xl font-medium leading-tight sm:text-5xl">
+              <h2 className="mt-3 font-(family-name:--font-display) text-4xl font-medium leading-tight sm:text-5xl">
                 Choose how you&apos;d like to study.
               </h2>
-              <p className="mt-4 max-w-md text-base leading-[1.7] text-[color-mix(in_oklch,var(--color-stone-cream)_82%,transparent)]">
+              <p className="mt-3 max-w-md text-base leading-[1.6] text-[color-mix(in_oklch,var(--color-stone-cream)_82%,transparent)]">
                 Every new student begins with a complimentary 30-minute introductory lesson, so you
                 and Nirmal can decide together whether the practice is right for you.
               </p>
-              <div className="mt-6 flex flex-wrap gap-2">
+              <div className="mt-4 flex flex-wrap gap-2">
                 {classTypes.map((type) => (
                   <span
                     key={type}
