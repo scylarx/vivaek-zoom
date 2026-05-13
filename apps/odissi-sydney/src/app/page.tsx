@@ -303,13 +303,13 @@ export default function HomePage() {
 
       <section
         id="classes"
-        className="bg-[--color-stone-shadow] px-5 py-10 text-[--color-stone-cream] sm:px-8 sm:py-12 lg:px-12"
+        className="bg-stone-shadow px-5 py-10 text-stone-cream sm:px-8 sm:py-12 lg:px-12"
       >
         <div className="mx-auto max-w-5xl">
-          <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-[--color-tarakasi-silver]">
+          <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-tarakasi-silver">
             Classes and rates
           </p>
-          <h2 className="mt-2 font-(family-name:--font-display) text-3xl font-medium leading-[1.1] sm:text-4xl">
+          <h2 className="mt-2 font-(family-name:--font-display) text-3xl font-medium leading-[1.1] text-stone-cream sm:text-4xl">
             Choose how you&apos;d like to study.
           </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -318,24 +318,20 @@ export default function HomePage() {
                 key={tier.title}
                 className="flex flex-col border border-white/15 bg-white/[0.03] p-5"
               >
-                <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.18em] text-[--color-tarakasi-silver]">
+                <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.18em] text-tarakasi-silver">
                   {tier.title}
                 </p>
-                <p className="mt-3 font-(family-name:--font-display) text-4xl font-medium leading-none">
+                <p className="mt-3 font-(family-name:--font-display) text-4xl font-medium leading-none text-stone-cream">
                   {tier.price}
                 </p>
-                <p className="mt-1 text-xs text-[color-mix(in_oklch,var(--color-stone-cream)_70%,transparent)]">
-                  {tier.cadence}
-                </p>
-                <p className="mt-3 text-sm leading-[1.55] text-[color-mix(in_oklch,var(--color-stone-cream)_88%,transparent)]">
-                  {tier.text}
-                </p>
+                <p className="mt-1 text-xs text-stone-cream/70">{tier.cadence}</p>
+                <p className="mt-3 text-sm leading-[1.55] text-stone-cream/85">{tier.text}</p>
               </article>
             ))}
           </div>
-          <div className="mt-3 flex flex-col gap-3 border border-[--color-jewel-teal]/60 bg-[--color-jewel-teal]/10 p-5 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm leading-[1.55] text-[color-mix(in_oklch,var(--color-stone-cream)_92%,transparent)] sm:max-w-xl">
-              <span className="font-(family-name:--font-body) uppercase tracking-[0.16em] text-[--color-tarakasi-silver]">
+          <div className="mt-3 flex flex-col gap-3 border border-jewel-teal/60 bg-jewel-teal/10 p-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm leading-[1.55] text-stone-cream/90 sm:max-w-xl">
+              <span className="font-(family-name:--font-body) uppercase tracking-[0.16em] text-tarakasi-silver">
                 Complimentary intro ·
               </span>{" "}
               Your first 30-minute lesson is on us — meet Nirmal, try the practice, and ask any
@@ -343,7 +339,7 @@ export default function HomePage() {
             </p>
             <a
               href="#contact"
-              className="inline-flex w-fit shrink-0 border border-[--color-stone-cream] px-5 py-2.5 text-sm text-[--color-stone-cream] transition-colors hover:bg-[--color-stone-cream] hover:text-[--color-stone-shadow]"
+              className="inline-flex w-fit shrink-0 border border-stone-cream px-5 py-2.5 text-sm text-stone-cream transition-colors hover:bg-stone-cream hover:text-stone-shadow"
             >
               Enquire about a lesson
             </a>
@@ -352,7 +348,7 @@ export default function HomePage() {
             {classTypes.map((type) => (
               <span
                 key={type}
-                className="border border-white/15 px-3 py-1.5 text-xs text-[color-mix(in_oklch,var(--color-stone-cream)_82%,transparent)]"
+                className="border border-white/15 px-3 py-1.5 text-xs text-stone-cream/80"
               >
                 {type}
               </span>
