@@ -8,7 +8,7 @@ const offerings = [
     text: "A rigorous classical practice shaped by lineage, sculpture, rhythm, expressive storytelling, and years of patient refinement.",
   },
   {
-    title: "Vocal music",
+    title: "Classical vocal training",
     text: "Voice training for students who want to deepen musicality, breath, listening, and the relationship between sound and devotion.",
   },
   {
@@ -52,11 +52,19 @@ const classTypes = [
   "Dance for Humanity free training",
 ];
 
-const pathways = [
-  "Begin as a new student with careful foundations.",
-  "Deepen an existing artistic practice.",
-  "Prepare for performance with seriousness and care.",
-  "Support health, wellbeing, rhythm, memory, and embodied confidence.",
+const pricing = [
+  {
+    title: "One-on-one",
+    price: "$65",
+    cadence: "per hour",
+    text: "Private tuition with Nirmal — pace, repertoire, and emphasis tailored to you.",
+  },
+  {
+    title: "Group, up to three",
+    price: "$100",
+    cadence: "per hour, for the group",
+    text: "Study with one or two others. Small enough for close correction, large enough to share rhythm and energy.",
+  },
 ];
 
 const structuredData = {
@@ -128,7 +136,7 @@ export default function HomePage() {
               Practice
             </a>
             <a href="#lineage" className="hover:text-[--color-jewel-maroon]">
-              Lineage
+              Origins
             </a>
             <a href="#classes" className="hover:text-[--color-jewel-maroon]">
               Classes
@@ -138,7 +146,7 @@ export default function HomePage() {
             </a>
           </div>
           <a
-            href="#contact"
+            href="#classes"
             className="border border-[--color-jewel-maroon] px-4 py-2 font-(family-name:--font-body) text-sm text-[--color-jewel-maroon] transition-colors hover:bg-[--color-jewel-maroon] hover:text-[--color-stone-cream]"
           >
             Enquire
@@ -152,16 +160,16 @@ export default function HomePage() {
         <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[0.95fr_1.05fr]">
           <div>
             <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-[--color-ink-muted]">
-              Indian classical dance, voice, and instrumental music
+              Operating since 1989 · Sydney and the Blue Mountains
             </p>
-            <h1 className="mt-7 max-w-4xl font-(family-name:--font-display) text-4xl font-medium leading-[1] text-[--color-ink] sm:text-6xl lg:text-7xl">
-              Authentic Indian classical dance and music with master teacher{" "}
+            <h1 className="mt-7 max-w-4xl font-(family-name:--font-display) text-4xl font-medium leading-[1.05] text-[--color-ink] sm:text-6xl lg:text-7xl">
+              Odissi Classical Dance &amp; Music School by{" "}
               <em className="not-italic text-[--color-jewel-maroon]">Nirmal Jena</em>.
             </h1>
             <p className="mt-7 max-w-2xl font-(family-name:--font-body) text-lg leading-[1.65] text-[--color-ink] sm:text-xl">
-              In Sydney and the Blue Mountains, Nirmal offers inspiring, transformative teaching for
-              students of all levels — whether you wish to perform, deepen your artistic practice,
-              or support your health and wellbeing.
+              Learn Indian classical dance, music, culture, and spirituality. Over thirty-seven
+              years of teaching, Nirmal has guided more than 2,000 students through this rigorous
+              lineage.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
@@ -174,7 +182,7 @@ export default function HomePage() {
                 href="#lineage"
                 className="inline-flex w-fit border border-[--color-rule] px-6 py-3 text-base text-[--color-ink] transition-colors hover:border-[--color-jewel-teal] hover:text-[--color-jewel-teal]"
               >
-                Understand the lineage
+                The origins
               </a>
             </div>
           </div>
@@ -253,18 +261,32 @@ export default function HomePage() {
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="temple-panel min-h-[26rem] border border-[--color-rule] p-8 sm:p-10">
             <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-[--color-ink-muted]">
-              Lineage
+              Origins
             </p>
             <h2 className="mt-6 font-(family-name:--font-display) text-4xl font-medium leading-tight text-[--color-ink]">
-              The Jena style of Odissi, in his father&apos;s lineage.
+              Recovered from temple stone, carried forward by family.
             </h2>
-            <p className="mt-8 text-base leading-[1.75] text-[--color-ink-muted]">
-              Nirmal is the son of Guru Surendra Nath Jena. The Jena style is recognised for the
-              depth of its basic positions, the undulating shape of its movement, and a
-              solo-performance focus that explores the <em>raudra</em> and <em>bibatsa</em>{" "}
-              sentiments where many Odissi traditions do not. Four scholarly sources document the
-              style; Nirmal&apos;s own translations of his father&apos;s writing carry it forward.
-            </p>
+            <div className="mt-8 space-y-5 text-base leading-[1.75] text-[--color-ink-muted]">
+              <p>
+                Odissi belongs to Odisha (Orissa), on the eastern coast of India. For centuries it
+                lived inside temple worship, until colonial policy under the British Raj suppressed
+                the temple-dance traditions that sustained it, and the form was very nearly lost.
+              </p>
+              <p>
+                Nirmal&apos;s father, Guru Surendra Nath Jena, recovered it from the stone itself.
+                In 1967 he travelled to the Sun Temple at Konark and studied the sculptural panels
+                of its nata mandapa — the dance hall — reading each carved pose as a unit of
+                movement and turning the iconography of the walls back into living dance. The Jena
+                style of Odissi grew out of that act of reconstruction.
+              </p>
+              <p>
+                The style is recognised for the depth of its basic positions, the undulating shape
+                of its movement, and a solo-performance focus that explores the <em>raudra</em> and{" "}
+                <em>bibatsa</em> sentiments where many Odissi traditions do not. Nirmal carries the
+                lineage forward as his father&apos;s son and student, and through his own
+                translations of his father&apos;s writing.
+              </p>
+            </div>
           </div>
           <figure className="self-end border-t border-[--color-rule] pt-8">
             <blockquote className="font-(family-name:--font-display) text-3xl italic leading-[1.35] text-[--color-ink] sm:text-4xl">
@@ -283,33 +305,66 @@ export default function HomePage() {
         id="classes"
         className="bg-[--color-stone-shadow] px-5 py-20 text-[--color-stone-cream] sm:px-8 lg:px-12"
       >
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.85fr_1.15fr]">
-          <div>
-            <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-[--color-tarakasi-silver]">
-              Classes and pathways
-            </p>
-            <h2 className="mt-5 font-(family-name:--font-display) text-4xl font-medium leading-tight sm:text-5xl">
-              For students who arrive with curiosity, ambition, or a need to return to the body.
-            </h2>
-            <div className="mt-8 flex flex-wrap gap-2">
-              {classTypes.map((type) => (
-                <span
-                  key={type}
-                  className="border border-white/15 px-3 py-2 text-sm text-[color-mix(in_oklch,var(--color-stone-cream)_82%,transparent)]"
-                >
-                  {type}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {pathways.map((pathway) => (
-              <div key={pathway} className="border border-white/15 bg-white/[0.03] p-5">
-                <p className="text-base leading-[1.6] text-[color-mix(in_oklch,var(--color-stone-cream)_88%,transparent)]">
-                  {pathway}
-                </p>
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-10">
+            <div>
+              <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-[--color-tarakasi-silver]">
+                Classes and rates
+              </p>
+              <h2 className="mt-4 font-(family-name:--font-display) text-4xl font-medium leading-tight sm:text-5xl">
+                Choose how you&apos;d like to study.
+              </h2>
+              <p className="mt-4 max-w-md text-base leading-[1.7] text-[color-mix(in_oklch,var(--color-stone-cream)_82%,transparent)]">
+                Every new student begins with a complimentary 30-minute introductory lesson, so you
+                and Nirmal can decide together whether the practice is right for you.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {classTypes.map((type) => (
+                  <span
+                    key={type}
+                    className="border border-white/15 px-3 py-2 text-sm text-[color-mix(in_oklch,var(--color-stone-cream)_82%,transparent)]"
+                  >
+                    {type}
+                  </span>
+                ))}
               </div>
-            ))}
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {pricing.map((tier) => (
+                <article
+                  key={tier.title}
+                  className="flex flex-col border border-white/15 bg-white/[0.03] p-6"
+                >
+                  <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.18em] text-[--color-tarakasi-silver]">
+                    {tier.title}
+                  </p>
+                  <p className="mt-4 font-(family-name:--font-display) text-5xl font-medium leading-none">
+                    {tier.price}
+                  </p>
+                  <p className="mt-2 text-sm text-[color-mix(in_oklch,var(--color-stone-cream)_70%,transparent)]">
+                    {tier.cadence}
+                  </p>
+                  <p className="mt-5 text-base leading-[1.6] text-[color-mix(in_oklch,var(--color-stone-cream)_88%,transparent)]">
+                    {tier.text}
+                  </p>
+                </article>
+              ))}
+              <div className="border border-[--color-jewel-teal]/60 bg-[--color-jewel-teal]/10 p-6 sm:col-span-2">
+                <p className="font-(family-name:--font-body) text-xs uppercase tracking-[0.18em] text-[--color-tarakasi-silver]">
+                  Complimentary introduction
+                </p>
+                <p className="mt-3 text-base leading-[1.6] text-[color-mix(in_oklch,var(--color-stone-cream)_92%,transparent)]">
+                  Your first 30-minute lesson is on us, included with any booking — a chance to
+                  meet Nirmal, try the practice, and ask any questions before you commit.
+                </p>
+                <a
+                  href="#contact"
+                  className="mt-5 inline-flex w-fit border border-[--color-stone-cream] px-5 py-2.5 text-sm text-[--color-stone-cream] transition-colors hover:bg-[--color-stone-cream] hover:text-[--color-stone-shadow]"
+                >
+                  Enquire about a lesson
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
