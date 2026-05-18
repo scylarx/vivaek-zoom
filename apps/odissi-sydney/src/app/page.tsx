@@ -13,7 +13,7 @@ const offerings = [
   },
   {
     title: "Instrumental music",
-    text: "Classical foundations taught with attention to tradition, discipline, and the living connection between music and movement.",
+    text: "Percussion (pakhawaj), harmonium, and tanpura — classical foundations taught with attention to tradition, discipline, and the living connection between music and movement.",
   },
 ];
 
@@ -52,18 +52,32 @@ const classTypes = [
   "Dance for Humanity free training",
 ];
 
+const testimonials = [
+  "As someone with a deep appreciation for Indian culture and philosophy, it has been such a gift to learn under Nirmal Ji. Having taken Hindustani classical vocal classes before, I have never experienced the depth of understanding Nirmal brings to his classes. There is the beauty of the art form, the ragas and learning harmonium and tanpura/swaramandal, but more so, the philosophy and the depth of this practice is shared. The longing to meet with the Divine through breath, sound, voice, meditation, body and soul has truly been such a gift. It’s more than a ‘music lesson’ — it’s a time to make space for contemplating the deeper things of life.",
+  "We live in an extremely fragmented world, where we cannot understand things in totality. The kaleidoscopic nature of Guruji’s dance — where life talks to art, the sublime to the everyday, the arts mirror each other whether painting, architecture, literature, music or dance — is a balm for our modern souls. More than anything else, it creates this beautiful totality with a lightness of being, with humour and humanity. It is a precious universe.",
+  "The connection he formed with each student transcended words; it was an intuitive energy exchange. Sessions were never pre-planned. They were shaped by what your soul needed that day — whether a specific meditation or a new dance step. I always left with exactly what was needed — nothing more, nothing less.",
+  "Over time, layers began to peel away. Old patterns, beliefs, and emotional baggage gave way to clarity and space. As I reconnected to my true self, my relationships changed too. People on different wavelengths fell away, while others aligned more deeply. Guruji’s unconditional love, his ability to understand you beyond words, was a guiding light. His presence helped untangle emotional knots that had built up over a lifetime.",
+  "Nirmal shares an unwavering presence and engagement in his approach to teaching, and connection with his students. The time shared and the space created for exploration of self is truly unique.",
+];
+
 const pricing = [
   {
-    title: "One-on-one",
-    price: "$65",
+    title: "Private class",
+    price: "$50",
     cadence: "per hour",
-    text: "Private tuition with Nirmal — pace, repertoire, and emphasis tailored to you.",
+    text: "One-on-one tuition with Nirmal — pace, repertoire, and emphasis tailored to you.",
   },
   {
-    title: "Group, up to three",
-    price: "$100",
-    cadence: "per hour, for the group",
-    text: "Study with one or two others. Small enough for close correction, large enough to share rhythm and energy.",
+    title: "Shared class · 2 students",
+    price: "$35",
+    cadence: "per person, per hour ($70 for the pair)",
+    text: "Please find a friend or partner to share with. If only one person attends, private class fees apply.",
+  },
+  {
+    title: "Group class · minimum 3",
+    price: "$30",
+    cadence: "per person, per hour",
+    text: "Up to 4 students at Chifley, 6 at Hazelbrook. If only one attends, private fees apply; if two, shared fees; three or more remains $30 each.",
   },
 ];
 
@@ -160,16 +174,19 @@ export default function HomePage() {
         <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[0.95fr_1.05fr]">
           <div>
             <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-[--color-ink-muted]">
-              Operating since 1989 · Sydney and the Blue Mountains
+              Operating in Sydney and the Blue Mountains
             </p>
             <h1 className="mt-7 max-w-4xl font-(family-name:--font-display) text-4xl font-medium leading-[1.05] text-[--color-ink] sm:text-6xl lg:text-7xl">
-              Odissi Classical Dance &amp; Music School by{" "}
-              <em className="not-italic text-[--color-jewel-maroon]">Nirmal Jena</em>.
+              Odissi Classical Dance &amp; Music Training &amp; Presentations by{" "}
+              <em className="not-italic text-[--color-jewel-maroon]">Nirmal Jena</em>
             </h1>
             <p className="mt-7 max-w-2xl font-(family-name:--font-body) text-lg leading-[1.65] text-[--color-ink] sm:text-xl">
-              Learn Indian classical dance, music, culture, and spirituality. Over thirty-seven
-              years of teaching, Nirmal has guided more than 2,000 students through this rigorous
-              lineage.
+              Learn Indian classical dance, music, culture, and spirituality as a living practice —
+              for daily life, performance, and teaching others. Guided by Guru Nirmal Jena&apos;s
+              depth of training, experience, and devotion, you will be supported from your very
+              first steps through to deeply internalising these sacred arts. His teaching offers
+              not only artistic mastery, but a path toward self-realisation, healing, and inner
+              transformation.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
@@ -312,7 +329,7 @@ export default function HomePage() {
           <h2 className="mt-2 font-(family-name:--font-display) text-3xl font-medium leading-[1.1] text-ink sm:text-4xl">
             Choose how you&apos;d like to study.
           </h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {pricing.map((tier) => (
               <article
                 key={tier.title}
@@ -329,21 +346,6 @@ export default function HomePage() {
               </article>
             ))}
           </div>
-          <div className="mt-3 flex flex-col gap-3 border border-jewel-teal/60 bg-jewel-teal/10 p-5 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm leading-[1.55] text-ink sm:max-w-xl">
-              <span className="font-(family-name:--font-body) uppercase tracking-[0.16em] text-jewel-teal">
-                Complimentary intro ·
-              </span>{" "}
-              Your first 30-minute lesson is on us — meet Nirmal, try the practice, and ask any
-              questions before you commit.
-            </p>
-            <a
-              href="#contact"
-              className="inline-flex w-fit shrink-0 border border-jewel-maroon bg-jewel-maroon px-5 py-2.5 text-sm text-stone-cream transition-colors hover:bg-transparent hover:text-jewel-maroon"
-            >
-              Enquire about a lesson
-            </a>
-          </div>
           <div className="mt-5 flex flex-wrap gap-2">
             {classTypes.map((type) => (
               <span
@@ -354,6 +356,41 @@ export default function HomePage() {
               </span>
             ))}
           </div>
+
+          <div className="mt-12 border-t border-rule pt-10">
+            <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-jewel-maroon">
+              Philosophy of teaching
+            </p>
+            <h3 className="mt-3 max-w-3xl font-(family-name:--font-display) text-3xl font-medium leading-[1.15] text-ink sm:text-4xl">
+              Indian classical arts as pathways into presence, discipline, beauty, and inner
+              transformation.
+            </h3>
+            <div className="mt-7 grid max-w-3xl gap-5 text-base leading-[1.75] text-ink-muted">
+              <p>
+                The teaching offered by Guru Nirmal Jena is rooted in the understanding that Indian
+                classical arts are not separate from life, but pathways into deeper awareness,
+                presence, discipline, beauty, and inner transformation. Dance, music, rhythm,
+                breath, meditation, storytelling, and philosophy are approached as interconnected
+                practices that cultivate both artistic excellence and self-understanding.
+              </p>
+              <p>
+                Students are guided not only in technique and performance, but in developing a
+                living relationship with the arts — one that can be carried into daily life with
+                sensitivity, integrity, and devotion. Learning unfolds through attentive mentorship,
+                embodied practice, reflection, humour, and human connection, honouring the
+                traditional spirit of guru&ndash;shishya parampara while meeting each student where
+                they are.
+              </p>
+              <p>
+                Classes are shaped with deep listening and responsiveness to the individual. Rather
+                than a rigid or purely instructional approach, teaching evolves through the needs,
+                readiness, and unfolding journey of each student. For some, this may begin with
+                foundational movement or musical training; for others, it becomes a process of
+                refinement, healing, contemplation, and reconnecting with a deeper sense of self.
+              </p>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -403,6 +440,35 @@ export default function HomePage() {
           </div>
           <div>
             <ContactForm />
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="testimonials"
+        aria-labelledby="testimonials-heading"
+        className="border-t border-[--color-rule] bg-[--color-bg-elevated] px-5 py-20 sm:px-8 lg:px-12"
+      >
+        <div className="mx-auto max-w-7xl">
+          <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-[--color-jewel-teal]">
+            In their words
+          </p>
+          <h2
+            id="testimonials-heading"
+            className="mt-3 max-w-3xl font-(family-name:--font-display) text-4xl font-medium italic leading-[1.2] text-[--color-ink] sm:text-5xl"
+          >
+            Students often describe the experience as far more than learning an art form.
+          </h2>
+          <div className="mt-10 grid gap-8 md:grid-cols-2">
+            {testimonials.map((quote, index) => (
+              <blockquote
+                // biome-ignore lint/suspicious/noArrayIndexKey: testimonials are static, repo-owned content with no stable id
+                key={index}
+                className="border-l border-[--color-jewel-maroon]/60 pl-5 font-(family-name:--font-display) text-lg italic leading-[1.55] text-[--color-ink] sm:text-xl"
+              >
+                &ldquo;{quote}&rdquo;
+              </blockquote>
+            ))}
           </div>
         </div>
       </section>
