@@ -156,11 +156,17 @@ export default function HomePage() {
             <p className="font-(family-name:--font-body) text-sm uppercase tracking-[0.2em] text-(--color-ink-muted)">
               Operating in Sydney and the Blue Mountains
             </p>
-            <h1 className="mt-7 max-w-4xl font-(family-name:--font-display) text-4xl font-medium leading-[1.05] text-(--color-ink) sm:text-6xl lg:text-7xl">
+            <h1 className="mt-7 max-w-4xl font-(family-name:--font-display) text-2xl font-medium leading-[1.1] text-(--color-ink) sm:text-3xl lg:text-[3.25rem]">
               Odissi Classical Dance &amp; Music Training &amp; Presentations by{" "}
               <em className="not-italic text-(--color-jewel-maroon)">Nirmal Jena</em>
             </h1>
-            <p className="mt-7 max-w-2xl font-(family-name:--font-body) text-lg leading-[1.65] text-(--color-ink) sm:text-xl">
+            <a
+              href="#enquire"
+              className="mt-7 inline-flex w-fit border border-jewel-maroon bg-jewel-maroon px-8 py-4 font-(family-name:--font-body) text-lg font-medium tracking-wide text-stone-cream shadow-md transition-colors hover:bg-transparent hover:text-jewel-maroon"
+            >
+              Book Now
+            </a>
+            <p className="mt-8 max-w-2xl font-(family-name:--font-body) text-lg leading-[1.65] text-(--color-ink) sm:text-xl">
               Learn Indian classical dance, music, culture, and spirituality as a living practice —
               for daily life, performance, and teaching others. Guided by Guru Nirmal Jena&apos;s
               depth of training, experience, and devotion, you will be supported from your very
@@ -171,7 +177,7 @@ export default function HomePage() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
                 href="#classes"
-                className="inline-flex w-fit border border-(--color-jewel-maroon) bg-(--color-jewel-maroon) px-6 py-3 text-base text-(--color-stone-cream) transition-colors hover:bg-transparent hover:text-(--color-jewel-maroon)"
+                className="inline-flex w-fit border border-(--color-jewel-maroon) px-6 py-3 text-base text-(--color-jewel-maroon) transition-colors hover:bg-(--color-jewel-maroon) hover:text-(--color-stone-cream)"
               >
                 Explore classes
               </a>
