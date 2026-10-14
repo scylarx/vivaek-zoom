@@ -1,5 +1,6 @@
 "use server";
 
+import { classOptions } from "@/lib/class-options";
 import { contactSchema } from "@/lib/validation/contact";
 
 export type ContactState = {
@@ -35,6 +36,7 @@ export async function contactAction(
     email: formData.get("email"),
     phone: formData.get("phone"),
     kind: formData.get("kind"),
+    classOption: formData.get("classOption") ?? "",
     message: formData.get("message"),
     botfield: formData.get("botfield"),
   };
@@ -59,7 +61,8 @@ export async function contactAction(
     return { ok: false, fieldErrors };
   }
 
-  const { name, email, phone, kind, message } = result.data;
+  const { name, email, phone, kind, classOption, message } = result.data;
+  const classOptionTitle = classOptions.find((o) => o.value === classOption)?.title ?? "";
   const subject = `Odissi Sydney — ${kindLabels[kind] ?? kind} from ${name}`;
 
   try {
@@ -79,6 +82,7 @@ export async function contactAction(
         email,
         phone: phone ?? "",
         enquiry_type: kindLabels[kind] ?? kind,
+        class_option: classOptionTitle,
         message,
       }),
     });

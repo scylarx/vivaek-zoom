@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { contactAction } from "@/app/actions/contact";
+import { classOptions, SELECT_CLASS_EVENT } from "@/lib/class-options";
 import { SubmitButton } from "./SubmitButton";
 
 const kindOptions = [
@@ -13,24 +14,35 @@ const kindOptions = [
 ] as const;
 
 const inputClass =
-  "w-full border border-[--color-rule] bg-[--color-bg] px-4 py-3 font-(family-name:--font-body) text-base text-[--color-ink] placeholder:text-[--color-ink-muted] focus:border-[--color-jewel-teal] focus:outline-none aria-invalid:border-[--color-alta]";
+  "w-full border border-(--color-rule) bg-(--color-bg) px-4 py-3 font-(family-name:--font-body) text-base text-(--color-ink) placeholder:text-(--color-ink-muted) focus:border-(--color-jewel-teal) focus:outline-none aria-invalid:border-(--color-alta)";
 
 const labelClass =
-  "block font-(family-name:--font-body) text-sm uppercase tracking-[0.12em] text-[--color-ink-muted]";
+  "block font-(family-name:--font-body) text-sm uppercase tracking-[0.12em] text-(--color-ink-muted)";
 
-const errorClass = "mt-1 font-(family-name:--font-body) text-sm text-[--color-alta]";
+const errorClass = "mt-1 font-(family-name:--font-body) text-sm text-(--color-alta)";
 
 export function ContactForm() {
   const [state, action] = useActionState(contactAction, { ok: false });
+  const [kind, setKind] = useState("");
+  const [classOption, setClassOption] = useState("");
+
+  useEffect(() => {
+    const onSelect = (event: Event) => {
+      setKind("classes");
+      setClassOption((event as CustomEvent<string>).detail);
+    };
+    window.addEventListener(SELECT_CLASS_EVENT, onSelect);
+    return () => window.removeEventListener(SELECT_CLASS_EVENT, onSelect);
+  }, []);
 
   if (state.ok) {
     return (
       <div
         role="status"
         aria-live="polite"
-        className="border border-[--color-jewel-teal] bg-[--color-bg-elevated] p-8"
+        className="border border-(--color-jewel-teal) bg-(--color-bg-elevated) p-8"
       >
-        <p className="font-(family-name:--font-display) text-2xl font-medium text-[--color-ink]">
+        <p className="font-(family-name:--font-display) text-2xl font-medium text-(--color-ink)">
           {state.message ?? "Message sent."}
         </p>
       </div>
@@ -53,7 +65,7 @@ export function ContactForm() {
         <div
           role="alert"
           aria-live="assertive"
-          className="border border-[--color-alta] bg-[color-mix(in_oklch,var(--color-alta)_8%,var(--color-bg))] p-4 font-(family-name:--font-body) text-base text-[--color-alta]"
+          className="border border-(--color-alta) bg-[color-mix(in_oklch,var(--color-alta)_8%,var(--color-bg))] p-4 font-(family-name:--font-body) text-base text-(--color-alta)"
         >
           {state.formError}
         </div>
@@ -109,7 +121,7 @@ export function ContactForm() {
         <div>
           <label htmlFor="contact-phone" className={labelClass}>
             Phone{" "}
-            <span className="normal-case tracking-normal text-[--color-ink-muted]">(optional)</span>
+            <span className="normal-case tracking-normal text-(--color-ink-muted)">(optional)</span>
           </label>
           <input
             id="contact-phone"
@@ -136,6 +148,8 @@ export function ContactForm() {
             name="kind"
             required
             aria-required="true"
+            value={kind}
+            onChange={(e) => setKind(e.target.value)}
             aria-describedby={state.fieldErrors?.kind ? "contact-kind-error" : undefined}
             aria-invalid={state.fieldErrors?.kind ? true : undefined}
             className={`${inputClass} mt-2 cursor-pointer appearance-none`}
@@ -153,6 +167,30 @@ export function ContactForm() {
             </p>
           ) : null}
         </div>
+      </div>
+
+      <div>
+        <label htmlFor="contact-class-option" className={labelClass}>
+          Type of class{" "}
+          <span className="normal-case tracking-normal text-(--color-ink-muted)">(optional)</span>
+        </label>
+        <select
+          id="contact-class-option"
+          name="classOption"
+          value={classOption}
+          onChange={(e) => {
+            setClassOption(e.target.value);
+            if (e.target.value && !kind) setKind("classes");
+          }}
+          className={`${inputClass} mt-2 cursor-pointer appearance-none`}
+        >
+          <option value="">Not sure yet</option>
+          {classOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.title} — {opt.price} {opt.cadence}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>

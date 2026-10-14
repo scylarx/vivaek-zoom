@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { classOptionValues } from "@/lib/class-options";
 
 export const contactSchema = z.object({
   name: z.string().trim().min(1, "Please tell us your name.").max(200),
@@ -11,6 +12,7 @@ export const contactSchema = z.object({
     .optional()
     .or(z.literal("")),
   kind: z.enum(["general", "classes", "charity", "press", "donation"]),
+  classOption: z.enum(classOptionValues).optional().or(z.literal("")),
   message: z.string().trim().min(10, "A few sentences, please.").max(5000),
   // Honeypot — must be empty or absent
   botfield: z.string().max(0, "Bot detected.").optional().or(z.literal("")),
