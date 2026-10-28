@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { contactAction } from "@/app/actions/contact";
 import { classOptions, SELECT_CLASS_EVENT } from "@/lib/class-options";
+import { trackPixel } from "./MetaPixel";
 import { SubmitButton } from "./SubmitButton";
 
 const kindOptions = [
@@ -34,6 +35,14 @@ export function ContactForm() {
     window.addEventListener(SELECT_CLASS_EVENT, onSelect);
     return () => window.removeEventListener(SELECT_CLASS_EVENT, onSelect);
   }, []);
+
+  // Successful enquiry = Meta "Lead" conversion for ad optimisation (once per submission).
+  const leadTracked = useRef(false);
+  useEffect(() => {
+    if (!state.ok || leadTracked.current) return;
+    leadTracked.current = true;
+    trackPixel("Lead", { content_category: kind || "general", content_name: classOption });
+  }, [state.ok, kind, classOption]);
 
   if (state.ok) {
     return (

@@ -413,6 +413,13 @@ export default function HomePage() {
               >
                 0422 000 691
               </a>
+              , email{" "}
+              <a
+                href="mailto:odcsydney@yahoo.com.au"
+                className="break-all font-medium text-(--color-jewel-maroon) underline underline-offset-4"
+              >
+                odcsydney@yahoo.com.au
+              </a>
               , or fill out the form below.
             </p>
             <ContactForm />

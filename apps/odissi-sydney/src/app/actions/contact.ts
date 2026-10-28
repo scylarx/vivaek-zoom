@@ -27,7 +27,7 @@ export async function contactAction(
   if (!endpoint) {
     return {
       ok: false,
-      formError: "Email isn't configured yet — please email odissisydney directly.",
+      formError: "Email isn't configured yet — please email odcsydney@yahoo.com.au directly.",
     };
   }
 
@@ -92,14 +92,16 @@ export async function contactAction(
       console.error("[contactAction] form endpoint error:", response.status, body);
       return {
         ok: false,
-        formError: "Something went wrong sending the message. Please try again.",
+        formError:
+          "Something went wrong sending the message. Please try again, or email odcsydney@yahoo.com.au.",
       };
     }
   } catch (err) {
     console.error("[contactAction] form endpoint fetch failed:", err);
     return {
       ok: false,
-      formError: "Something went wrong sending the message. Please try again.",
+      formError:
+        "Something went wrong sending the message. Please try again, or email odcsydney@yahoo.com.au.",
     };
   }
 
